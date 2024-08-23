@@ -1,14 +1,11 @@
+#!/bin/bash
 
-ln -sf ~/.dotfiles/.zshrc ~/.zshrc
+files="zshrc profile tmux.conf vimrc"
 
+for file in $files; do 
+	ln -sf ~/.dotfiles/$file ~/.$file
+#	echo $file >> test.txt
+done
 
-ln -sf ~/.dotfiles/.profile ~/.profile
-
-
-ln -sf ~/.dotfiles/.tmux.conf ~/.tmux.conf
-
-
-ln -sf ~/.dotfiles/.vimrc ~/.vimrc
-
-
-
+# ln -s ~/.dotfiles/vimrc ~/.vimrc
+ 

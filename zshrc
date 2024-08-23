@@ -14,6 +14,9 @@ export ZSH="$HOME/.oh-my-zsh"
 
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f >>> '
 
+# Aliases
+
+alias tmux='tmux new zsh'
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
