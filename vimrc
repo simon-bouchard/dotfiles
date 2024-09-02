@@ -1,3 +1,8 @@
+" linter
+execute pathogen#infect()
+
+filetype plugin indent on
+
 " Comments in Vimscript start with a `"`.
 
 " If you open this file in Vim, it'll be syntax highlighted for you.

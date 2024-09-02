@@ -16,7 +16,9 @@ PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f >>> '
 
 # Aliases
 
-alias tmux='tmux new zsh'
+#alias tmux='tmux new zsh'
+alias python='python3'
+alias pip='pip3'
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
