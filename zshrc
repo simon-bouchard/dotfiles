@@ -12,7 +12,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Prompt custom 
 
-PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}%>%f%F{green}>%f '
+PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 
 # Aliases
 
