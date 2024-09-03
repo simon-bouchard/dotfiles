@@ -1,3 +1,6 @@
+#enable vim keybindings
+bindkey -v
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -19,6 +22,7 @@ PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 #alias tmux='tmux new zsh'
 alias python='python3'
 alias pip='pip3'
+alias la='ls -a'
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -108,7 +112,4 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
