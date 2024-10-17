@@ -97,4 +97,3 @@ filetype plugin indent on
 " Use system clipboard for copy/paste
 set clipboard=unnamedplus
 
-
