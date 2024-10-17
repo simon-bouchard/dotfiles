@@ -17,13 +17,6 @@ export ZSH="$HOME/.oh-my-zsh"
 
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 
-# Aliases
-
-#alias tmux='tmux new zsh'
-alias python='python3'
-alias pip='pip3'
-alias la='ls -a'
-
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -105,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
+#ALIASES
 # Set personal aliases, overriding those provided by Oh My Zsh libs,
 # plugins, and themes. Aliases can be placed here, though Oh My Zsh
 # users are encouraged to define aliases within a top-level file in
@@ -112,4 +106,7 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
+alias python='python3'
+alias pip='pip3'
+alias la='ls -a'
 

@@ -1,7 +1,3 @@
-
-
-filetype plugin indent on
-
 " Comments in Vimscript start with a `"`.
 
 " If you open this file in Vim, it'll be syntax highlighted for you.
@@ -82,3 +78,23 @@ inoremap <Left>  <ESC>:echoe "Use h"<CR>
 inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
+
+" Personal settings
+
+" Set tab and auto tab to 4 spaces
+set tabstop=4
+set shiftwidth=4
+
+" Highlights search 
+set hlsearch
+
+" encoding
+set encoding=utf8
+
+" Enable file-type specific plugins and indenting
+filetype plugin indent on
+
+" Use system clipboard for copy/paste
+set clipboard=unnamedplus
+
+
