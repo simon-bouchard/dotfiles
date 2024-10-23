@@ -24,7 +24,7 @@ fi
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing Oh My Zsh..."
     # Run the Oh My Zsh installation script
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
 else
     echo "Oh My Zsh is already installed."
 fi
@@ -59,5 +59,13 @@ install_plugin "$FAST_SYNTAX_HIGHLIGHTING_REPO" "fast-syntax-highlighting"
 install_plugin "$AUTOCOMPLETE_REPO" "zsh-autocomplete"
 
 echo "Zsh, Oh My Zsh, and Zsh plugins installed!"
+
+# Switch shell to zsh
+if [ "$SHELL" != "$(which zsh)" ]; then
+    echo "Changing default shell to Zsh..."
+    chsh -s $(which zsh)
+else
+    echo "Default shell is already Zsh."
+fi
 
 echo "Installation complete!"
