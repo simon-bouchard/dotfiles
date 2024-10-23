@@ -14,7 +14,6 @@ export ZSH="$HOME/.oh-my-zsh"
 #ZSH_THEME="robbyrussell"
 
 # Prompt custom 
-
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 
 # Set list of themes to pick from when loading at random
