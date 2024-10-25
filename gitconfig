@@ -1,0 +1,13 @@
+[alias]
+	graph = log --all --graph --decorate --oneline
+[core]
+	excludesfile = /root/.gitignore_global
+[user]
+	name = Simon Bouchard
+	email = simon.bouchard31@gmail.com
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

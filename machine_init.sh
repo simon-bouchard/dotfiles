@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Dotfiles
-files="zshrc profile tmux.conf vimrc"
+files="zshrc profile tmux.conf vimrc gitconfig gitignore_global"
 
 for file in $files; do 
 	ln -sf ~/dotfiles/$file ~/.$file

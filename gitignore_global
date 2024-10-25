@@ -1,0 +1,20 @@
+# Ignore zone identifier files (WSL)
+*Zone.Identifier
+
+# Ignore vim swap and backup files
+*.swp
+*.swo
+*.swn
+
+*.bak
+*.backup
+
+# Sensitive SSH and GPG files
+.ssh/
+id_rsa
+id_rsa.pub
+known_hosts
+
+.gnupg/
+
+
