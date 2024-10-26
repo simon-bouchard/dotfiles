@@ -29,6 +29,15 @@ else
     echo "Oh My Zsh is already installed."
 fi
 
+#Install Tmux
+if ! command -v tmux &> /dev/null
+then
+	echo 'Installing tmux...'
+	sudo apt-get install -y tmux
+else
+	echo 'Tmux is already installed.'
+fi
+
 # Install zsh plugins
 
 # Define the Oh My Zsh custom plugin directory
@@ -69,3 +78,52 @@ else
 fi
 
 echo "Installation complete!"
+
+# Function to install meld on Debian-based systems (Ubuntu, etc.)
+install_meld_debian() {
+    echo "Detected Debian-based system. Installing meld..."
+    sudo apt update -y
+    sudo apt install -y meld
+}
+
+# Function to install meld on Fedora
+install_meld_fedora() {
+    echo "Detected Fedora system. Installing meld..."
+    sudo dnf install -y meld
+}
+
+# Function to install meld on CentOS/RHEL
+install_meld_centos() {
+    echo "Detected CentOS/RHEL system. Installing meld..."
+    sudo yum install -y epel-release
+    sudo yum install -y meld
+}
+
+# Function to install meld on macOS
+install_meld_macos() {
+    echo "Detected macOS. Installing meld..."
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew not found. Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    brew install --cask meld
+}
+
+# Detect OS and install meld
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    if command -v apt &>/dev/null; then
+        install_meld_debian
+    elif command -v dnf &>/dev/null; then
+        install_meld_fedora
+    elif command -v yum &>/dev/null; then
+        install_meld_centos
+    else
+        echo "Unsupported Linux distribution. Manual installation needed."
+    fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    install_meld_macos
+else
+    echo "Unsupported OS. Manual installation needed."
+fi
+
+echo "Meld installation complete."
