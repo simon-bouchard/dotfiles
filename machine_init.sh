@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Dotfiles
-files="zshrc profile tmux.conf vimrc gitconfig gitignore_global"
+files="zshrc tmux.conf vimrc gitconfig gitignore_global"
 
 for file in $files; do 
 	ln -sf ~/dotfiles/$file ~/.$file
@@ -78,6 +78,8 @@ else
 fi
 
 echo "Installation complete!"
+
+# Meld installation 
 
 # Function to install meld on Debian-based systems (Ubuntu, etc.)
 install_meld_debian() {

@@ -1,11 +1,11 @@
-#enable vim keybindings
-bindkey -v
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+#enable vim keybindings
+bindkey -v
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -78,6 +78,7 @@ PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 
+#source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
