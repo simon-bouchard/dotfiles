@@ -97,3 +97,5 @@ filetype plugin indent on
 " Use system clipboard for copy/paste
 set clipboard=unnamedplus
 
+" Enable Neomake with shellcheck
+let g:neomake_sh_enabled_makers = ['shellcheck']
