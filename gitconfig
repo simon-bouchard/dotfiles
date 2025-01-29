@@ -1,6 +1,3 @@
-[alias]
-	graph = log --all --graph --decorate --oneline
-
 [core]
 	excludesfile = /root/.gitignore_global
 
@@ -20,11 +17,17 @@
 [color]
     ui = auto
 
+[core]
+  autocrlf = true
+
 [alias]
     co = checkout
+	a = add -A
     cm = commit
+	p = push
     st = status
     br = branch
+	graph = log --all --graph --decorate --oneline
 
 [merge]
 tool = meld
