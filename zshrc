@@ -121,3 +121,6 @@ if [ -f '/tmp/google-cloud-sdk/path.zsh.inc' ]; then . '/tmp/google-cloud-sdk/pa
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/tmp/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+source ~/miniconda3/etc/profile.d/conda.sh

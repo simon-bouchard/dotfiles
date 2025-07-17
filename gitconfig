@@ -34,3 +34,5 @@ tool = meld
 
 [url "git@github.com:"]
 	pushInsteadOf = https://github.com/
+	cloneInsteadOf = https://github.com/
+	insteadOf = https://github.com/
