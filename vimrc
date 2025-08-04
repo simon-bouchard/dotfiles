@@ -99,3 +99,6 @@ set clipboard=unnamedplus
 
 " Enable Neomake with shellcheck
 let g:neomake_sh_enabled_makers = ['shellcheck']
+
+" Shortkey for paste mode "
+nnoremap <C-p> :set paste!<CR>:set paste?<CR>
