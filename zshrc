@@ -107,10 +107,12 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 alias python='python3'
+alias py='python3'
 alias pip='pip3'
 alias la='ls -a'
+alias sl='ls'
+alias dc='cd'
 alias xcopy='xclip -selection clipboard'
-
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
