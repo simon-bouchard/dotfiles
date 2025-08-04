@@ -24,6 +24,7 @@
     co = checkout
 	a = add -A
     cm = commit
+	c = commit -m
 	p = push
     st = status
     br = branch
