@@ -1,5 +1,8 @@
 " Comments in Vimscript start with a `"`.
 
+" Make space the leader key
+let mapleader=" "
+
 " If you open this file in Vim, it'll be syntax highlighted for you.
 
 " Vim is based on Vi. Setting `nocompatible` switches from the default
@@ -100,5 +103,5 @@ set clipboard=unnamedplus
 " Enable Neomake with shellcheck
 let g:neomake_sh_enabled_makers = ['shellcheck']
 
-" Shortkey for paste mode "
-nnoremap <C-p> :set paste!<CR>:set paste?<CR>
+" Shortkey for paste mode
+nnoremap <leader>p :set paste!<CR>:set paste?<CR>
