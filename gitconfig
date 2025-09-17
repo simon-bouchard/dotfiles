@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /root/.gitignore_global
+	excludesfile = ~/.gitignore_global
 
 [user]
 	name = Simon Bouchard
@@ -35,3 +35,5 @@ tool = meld
 
 [url "git@github.com:"]
 	pushInsteadOf = https://github.com/
+[safe]
+	directory = /home/simon/dotfiles
