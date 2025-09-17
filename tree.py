@@ -19,7 +19,9 @@ def build_tree(root_path='.', prefix=''):
     return lines
 
 if __name__ == '__main__':
-    tree_lines = [f"📁 Project tree from: {os.getcwd()}", ""] + build_tree()
+    cwd = os.getcwd()
+    tree_lines = [f"📁 Project tree from: {cwd}", ""] + build_tree(cwd)
     result = '\n'.join(tree_lines)
     pyperclip.copy(result)
     print("✅ Project structure copied to clipboard.")
+
