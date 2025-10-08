@@ -128,6 +128,7 @@ if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/tmp/google-cloud-
 #eval "$(pyenv init --path)"
 # source ~/miniconda3/etc/profile.d/conda.sh  # commented out by conda initialize
 
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/simon/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
