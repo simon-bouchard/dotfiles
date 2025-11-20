@@ -7,6 +7,10 @@ for file in $files; do
 
 done
 
+# Starship configuration
+mkdir -p ~/.config
+ln -sf ~/dotfiles/starship.toml ~/.config/starship.toml
+
 echo "Dotfiles installed"
 
 
