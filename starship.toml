@@ -29,12 +29,7 @@ symbol = ""  # no emoji
 format = " [$environment]($style) "
 
 [python]
-disabled = false
-symbol = ""
-format = "[(venv: $virtualenv)]($style) "
-style = "blue"
-pyenv_version_name = false
-python_binary = "python3"
+disabled = true
 
 [character]
 success_symbol = "[❯](bold green) "
