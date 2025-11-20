@@ -75,6 +75,36 @@ else
     echo "Starship is already installed."
 fi
 
+# Install JetBrainsMono Nerd Font
+echo "Installing JetBrainsMono Nerd Font..."
+
+ORIG_DIR="$(pwd)"                         # Save current directory
+FONT_DIR="$HOME/.local/share/fonts"
+JETBRAINS_ZIP="JetBrainsMono.zip"
+JETBRAINS_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+
+mkdir -p "$FONT_DIR/JetBrainsMono"
+cd "$FONT_DIR"
+
+# Download font zip if missing
+if [ ! -f "$JETBRAINS_ZIP" ]; then
+    curl -fsSL -o "$JETBRAINS_ZIP" "$JETBRAINS_URL"
+fi
+
+# Extract (quietly, overwrite OK)
+unzip -o "$JETBRAINS_ZIP" -d JetBrainsMono >/dev/null
+
+# Refresh font cache
+fc-cache -fv >/dev/null
+
+# Return to original directory
+cd "$ORIG_DIR"
+
+echo "JetBrainsMono Nerd Font installed."
+
+
+# Install Lsd (pretty ls)
+sudo snap install lsd
 
 # Meld installation 
 

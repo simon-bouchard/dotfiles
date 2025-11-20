@@ -108,6 +108,7 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 
 # Basic Aliases
+alias ls="lsd"
 alias la='ls -a'
 alias sl='ls'
 alias dc='cd'
@@ -209,3 +210,4 @@ unset __conda_setup
 
 # Starship Prompt 
 eval "$(starship init zsh)"
+export PATH="/snap/bin:$PATH"
