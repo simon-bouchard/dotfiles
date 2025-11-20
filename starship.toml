@@ -37,8 +37,8 @@ pyenv_version_name = false
 python_binary = "python3"
 
 [character]
-success_symbol = "[>](bold green) "
-error_symbol = "[>](bold green) "
+success_symbol = "[❯](bold green) "
+error_symbol = "[❯](bold green) "
 
 [cmd_duration]
 min_time = 5000  # show only if >5s
