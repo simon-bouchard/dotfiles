@@ -114,6 +114,18 @@ alias sl='ls'
 alias dc='cd'
 alias xcopy='xclip -selection clipboard'
 alias tree="python3 ~/dotfiles/tree.py"
+alias ga="git add"
+alias gaa="git add -A"
+alias gc="git commit -m"
+alias gps="git push"
+alias gpl="git pull"
+alias gs="git status"
+alias gl="git log --oneline --graph --decorate"
+alias dk="docker"
+alias uv="uvicorn main:app --reload"
+alias ca="conda activate"
+alias cdv="conda deactivate"
+alias v="vim"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

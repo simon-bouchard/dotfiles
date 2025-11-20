@@ -29,6 +29,7 @@
     st = status
     br = branch
 	graph = log --all --graph --decorate --oneline
+	ts = status
 
 [merge]
 tool = meld
