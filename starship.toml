@@ -1,0 +1,48 @@
+format = """
+$directory$git_branch$git_status$conda$cmd_duration
+$character
+"""
+
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+style = "cyan"
+
+[git_branch]
+style = "yellow"
+symbol = ""  # remove nerd font icon
+
+[git_status]
+conflicted = "!"
+ahead = "↑"
+behind = "↓"
+diverged = "↕"
+untracked = "?"
+stashed = "≡"
+modified = "*"
+staged = "+"
+format = "([$all_status$ahead_behind]($style)) "
+style = "red"
+
+[conda]
+symbol = ""  # no emoji
+format = " [$environment]($style) "
+
+[python]
+disabled = false
+symbol = ""
+format = "[(venv: $virtualenv)]($style) "
+style = "blue"
+pyenv_version_name = false
+python_binary = "python3"
+
+[character]
+success_symbol = "[>](bold green) "
+error_symbol = "[>](bold green) "
+
+[cmd_duration]
+min_time = 5000  # show only if >5s
+show_milliseconds = false
+format = "took $duration "
+style = "bold yellow"
+
