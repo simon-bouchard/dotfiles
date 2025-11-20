@@ -67,7 +67,14 @@ else
     echo "Default shell is already Zsh."
 fi
 
-echo "Installation complete!"
+
+if ! command -v starship >/dev/null 2>&1; then
+    echo "Starship not found. Installing Starship prompt..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+else
+    echo "Starship is already installed."
+fi
+
 
 # Meld installation 
 
@@ -77,3 +84,4 @@ sudo apt install -y meld
 
         
 echo "Meld installation complete."
+echo "Machine installation complete"
