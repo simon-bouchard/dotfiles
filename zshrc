@@ -76,7 +76,15 @@ PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions fast-syntax-highlighting zsh-autocomplete)
+plugins=(
+  git
+  zsh-autosuggestions
+  fast-syntax-highlighting
+  zsh-autocomplete
+  fzf-tab
+  zsh-history-substring-search
+  zsh-completions
+)
 
 #source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -211,3 +219,6 @@ unset __conda_setup
 # Starship Prompt 
 eval "$(starship init zsh)"
 export PATH="/snap/bin:$PATH"
+
+# Direnv
+eval "$(direnv hook zsh)"
