@@ -11,6 +11,9 @@ done
 mkdir -p ~/.config
 ln -sf ~/dotfiles/starship.toml ~/.config/starship.toml
 
+mkdir -p ~/.config/nvim
+ln -sf ~/dotfiles/init.lua ~/.config/nvim/init.lua
+
 echo "Dotfiles installed"
 
 
