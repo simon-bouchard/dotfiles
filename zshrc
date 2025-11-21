@@ -230,3 +230,11 @@ export PATH="/snap/bin:$PATH"
 # Direnv
 export DIRENV_LOG_FORMAT=""
 eval "$(direnv hook zsh)"
+
+# Zoxide (smart cd)
+eval "$(zoxide init zsh)"
+
+# uv (Python package manager) - add to PATH
+export PATH="$HOME/.cargo/bin:$PATH"
+
+. "$HOME/.local/bin/env"
