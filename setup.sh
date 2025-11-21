@@ -1,5 +1,4 @@
 #!/bin/bash
-#setup.sh
 
 #Install Zsh and oh-my-zsh
 
@@ -125,6 +124,14 @@ if ! command -v meld >/dev/null 2>&1; then
     sudo apt install -y meld
 else
     echo "Meld is already installed."
+fi
+
+# xclip installation (for clipboard operations)
+if ! command -v xclip >/dev/null 2>&1; then
+    echo "Installing xclip..."
+    sudo apt install -y xclip
+else
+    echo "xclip is already installed."
 fi
 
 echo "Machine installation complete"
