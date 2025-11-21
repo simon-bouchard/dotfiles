@@ -159,7 +159,7 @@ alias gsw="git switch"
 alias gb="git branch"
 
 # Custom Commands and Scripts Aliases
-alias tree="python3 ~/dotfiles/tree.py"
+alias tree="python3 ~/dotfiles/scripts/tree.py"
 alias xcopy='xclip -selection clipboard -i && sleep 0.1'
 
 xcopylarge() {
