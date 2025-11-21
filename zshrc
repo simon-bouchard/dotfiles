@@ -86,6 +86,8 @@ plugins=(
   zsh-completions
 )
 
+zstyle ':autocomplete:*' ignored-input 'direnv: *'
+
 #source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -221,4 +223,5 @@ eval "$(starship init zsh)"
 export PATH="/snap/bin:$PATH"
 
 # Direnv
+export DIRENV_LOG_FORMAT=""
 eval "$(direnv hook zsh)"
