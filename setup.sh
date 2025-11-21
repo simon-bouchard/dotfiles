@@ -1,4 +1,5 @@
 #!/bin/bash
+#setup.sh
 
 # Improved machine initialization script with error handling
 # Exit on error and undefined variables
@@ -166,10 +167,10 @@ mkdir -p "$FONT_DIR/JetBrainsMono"
 if [ ! -f "$FONT_DIR/JetBrainsMono/JetBrainsMono Regular Nerd Font Complete.ttf" ]; then
     ORIG_DIR="$(pwd)"
     cd "$FONT_DIR"
-    
+
     JETBRAINS_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
     JETBRAINS_ZIP="JetBrainsMono.zip"
-    
+
     log_info "Downloading JetBrainsMono..."
     if ! curl -fsSL -o "$JETBRAINS_ZIP" "$JETBRAINS_URL"; then
         log_error "Failed to download JetBrainsMono font"
@@ -178,10 +179,10 @@ if [ ! -f "$FONT_DIR/JetBrainsMono/JetBrainsMono Regular Nerd Font Complete.ttf"
         log_info "Extracting font..."
         unzip -o "$JETBRAINS_ZIP" -d JetBrainsMono >/dev/null
         rm "$JETBRAINS_ZIP"
-        
+
         log_info "Refreshing font cache..."
         fc-cache -fv >/dev/null
-        
+
         cd "$ORIG_DIR"
         log_success "JetBrainsMono font installed"
     fi
