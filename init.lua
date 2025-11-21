@@ -35,6 +35,9 @@ require("lazy").setup({
 })
 
 
+-- Make sure parsers are found or compiled --------------------------------
+vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/lazy/parsers")
+
 -- LEADER KEY -------------------------------------------------------------
 vim.g.mapleader = " "
 
@@ -56,7 +59,7 @@ vim.opt.shiftwidth = 4                 -- indentation amount
 vim.opt.backspace = { "indent", "eol", "start" } -- sane backspace behavior
 
 -- CLIPBOARD --------------------------------------------------------------
-vim.opt.clipboard = "unnamedplus"      -- use system clipboard
+vim.opt.clipboard = "unnamed"          -- use system clipboard
 
 -- MOUSE ------------------------------------------------------------------
 vim.opt.mouse = "a"                    -- enable mouse
