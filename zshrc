@@ -13,7 +13,7 @@ bindkey -v
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 
-# Prompt custom 
+# Prompt custom
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 
 # Set list of themes to pick from when loading at random
@@ -159,8 +159,13 @@ alias gsw="git switch"
 alias gb="git branch"
 
 # Custom Commands and Scripts Aliases
-alias xcopy='xclip -selection clipboard'
 alias tree="python3 ~/dotfiles/tree.py"
+alias xcopy='xclip -selection clipboard -i && sleep 0.1'
+
+xcopylarge() {
+    xclip -selection clipboard -i < "$1"
+    echo "Copied $(wc -c < "$1") bytes to clipboard"
+}
 
 # Server Admin Aliases
 alias jl="journalctl -u"
@@ -218,7 +223,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Starship Prompt 
+# Starship Prompt
 eval "$(starship init zsh)"
 export PATH="/snap/bin:$PATH"
 
