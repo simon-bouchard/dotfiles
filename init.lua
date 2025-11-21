@@ -47,7 +47,7 @@ require("lazy").setup({
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "pylsp",
+          "pyright",  -- Changed from pylsp to pyright
           "lua_ls",
           "ts_ls",
           "html",
@@ -94,7 +94,23 @@ require("lazy").setup({
   "hrsh7th/cmp-path",
   "L3MON4D3/LuaSnip",
 
-  -- Linting
+  -- Formatting (NEW)
+  {
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          python = { "ruff_format" },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+      })
+    end
+  },
+
+  -- Linting (UPDATED)
   {
     "mfussenegger/nvim-lint",
     config = function()
@@ -104,15 +120,9 @@ require("lazy").setup({
         sh = {"shellcheck"},
         bash = {"shellcheck"},
         zsh = {"shellcheck"},
-        python = {"pylint"},
+        python = {"ruff"},  -- Changed from pylint to ruff
         javascript = {"eslint"},
         typescript = {"eslint"},
-      }
-
-      -- Disable pylint whitespace warnings
-      lint.linters.pylint.args = {
-        "--disable=W391",  -- blank line at end of file
-        "--disable=C0111", -- missing docstring
       }
 
       vim.api.nvim_create_autocmd("BufWritePost", {
@@ -120,6 +130,40 @@ require("lazy").setup({
           lint.try_lint()
         end,
       })
+    end
+  },
+
+  -- Debugging (NEW)
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "nvim-neotest/nvim-nio",
+    },
+    config = function()
+      local dap = require("dap")
+      local dapui = require("dapui")
+
+      -- Setup UI
+      dapui.setup()
+
+      -- Auto-open/close UI
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+    end
+  },
+  {
+    "mfussenegger/nvim-dap-python",
+    dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("dap-python").setup("python3")
     end
   },
 })
@@ -172,6 +216,7 @@ vim.diagnostic.config({
   update_in_insert = false,
 })
 
+-- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>",  ":echo 'Use h'<CR>")
 vim.keymap.set("n", "<Right>", ":echo 'Use l'<CR>")
 vim.keymap.set("n", "<Up>",    ":echo 'Use k'<CR>")
@@ -182,10 +227,20 @@ vim.keymap.set("i", "<Right>", "<ESC>:echo 'Use l'<CR>")
 vim.keymap.set("i", "<Up>",    "<ESC>:echo 'Use k'<CR>")
 vim.keymap.set("i", "<Down>",  "<ESC>:echo 'Use j'<CR>")
 
+-- Paste mode toggle
 vim.keymap.set("n", "<leader>p", function()
   vim.opt.paste = not vim.opt.paste:get()
   print("paste = " .. (vim.opt.paste:get() and "ON" or "OFF"))
 end)
+
+-- Debugging keybindings (NEW)
+vim.keymap.set("n", "<leader>b", ":DapToggleBreakpoint<CR>", { desc = "Toggle breakpoint" })
+vim.keymap.set("n", "<leader>dc", ":DapContinue<CR>", { desc = "Start/Continue debugging" })
+vim.keymap.set("n", "<leader>di", ":DapStepInto<CR>", { desc = "Step into" })
+vim.keymap.set("n", "<leader>do", ":DapStepOver<CR>", { desc = "Step over" })
+vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>", { desc = "Step out" })
+vim.keymap.set("n", "<leader>dt", ":DapTerminate<CR>", { desc = "Terminate debugging" })
+vim.keymap.set("n", "<leader>dr", ":DapToggleRepl<CR>", { desc = "Toggle REPL" })
 
 require('lualine').setup({
   options = {
@@ -228,7 +283,7 @@ vim.api.nvim_create_autocmd("User", {
 
     -- Setup each LSP server using vim.lsp.config
     local servers = {
-      { name = "pylsp", cmd = { "pylsp" } },
+      { name = "pyright", cmd = { "pyright-langserver", "--stdio" } },  -- Changed from pylsp
       { name = "lua_ls", cmd = { "lua-language-server" } },
       { name = "ts_ls", cmd = { "typescript-language-server", "--stdio" } },
       { name = "html", cmd = { "vscode-html-language-server", "--stdio" } },
