@@ -134,4 +134,62 @@ else
     echo "xclip is already installed."
 fi
 
-echo "Machine installation complete"
+# ===== NEW PYTHON TOOLING =====
+
+# Install uv (Python package manager)
+if ! command -v uv >/dev/null 2>&1; then
+    echo "Installing uv (Python package manager)..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+else
+    echo "uv is already installed."
+fi
+
+# Ensure Python3 and pip are installed
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "Installing Python3..."
+    sudo apt install -y python3 python3-pip python3-venv
+else
+    echo "Python3 is already installed."
+fi
+
+# Install Python development tools via pip
+echo "Installing Python development tools..."
+python3 -m pip install --user --upgrade pip
+python3 -m pip install --user ruff pyright pre-commit debugpy
+
+# Install zoxide (smart cd)
+if ! command -v zoxide >/dev/null 2>&1; then
+    echo "Installing zoxide..."
+    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+else
+    echo "zoxide is already installed."
+fi
+
+# Install btop (system monitor - optional)
+if ! command -v btop >/dev/null 2>&1; then
+    echo "Installing btop (system monitor)..."
+    sudo apt install -y btop
+else
+    echo "btop is already installed."
+fi
+
+# Install Node.js if not present (needed for some LSP servers)
+if ! command -v node >/dev/null 2>&1; then
+    echo "Installing Node.js..."
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt install -y nodejs
+else
+    echo "Node.js is already installed."
+fi
+
+echo ""
+echo "===================="
+echo "Machine setup complete!"
+echo "===================="
+echo ""
+echo "Next steps:"
+echo "1. Run ./symlink.sh to link dotfiles"
+echo "2. Restart your shell or run: source ~/.zshrc"
+echo "3. Open Neovim - plugins will auto-install via Mason"
+echo "4. In your projects, run: pre-commit install"
+echo ""
