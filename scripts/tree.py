@@ -1,4 +1,5 @@
 import os
+import argparse
 import pyperclip
 
 EXCLUDED = {
@@ -21,8 +22,7 @@ def build_tree(root_path=".", prefix=""):
         [
             entry
             for entry in os.listdir(root_path)
-            if entry not in EXCLUDED
-            and not any(entry.endswith(ext) for ext in EXCLUDED_EXTENSIONS)
+            if entry not in EXCLUDED and not any(entry.endswith(ext) for ext in EXCLUDED_EXTENSIONS)
         ]
     )
     for i, entry in enumerate(entries):
@@ -36,8 +36,25 @@ def build_tree(root_path=".", prefix=""):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate project tree")
+    parser.add_argument(
+        "-w",
+        "--write",
+        metavar="FILE",
+        nargs="?",
+        const="tree.txt",
+        help="Write to file (default: tree.txt)",
+    )
+    args = parser.parse_args()
+
     cwd = os.getcwd()
     tree_lines = [f"📁 Project tree from: {cwd}", ""] + build_tree(cwd)
     result = "\n".join(tree_lines)
-    pyperclip.copy(result)
-    print("✅ Project structure copied to clipboard.")
+
+    if args.write:
+        with open(args.write, "w") as f:
+            f.write(result)
+        print(f"✅ Project structure written to {args.write}")
+    else:
+        pyperclip.copy(result)
+        print("✅ Project structure copied to clipboard.")
