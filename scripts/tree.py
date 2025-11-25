@@ -1,7 +1,7 @@
 import os
 import pyperclip
 
-EXCLUDED = {'.git', '__pycache__', 'node_modules', 'venv', '.mypy_cache', '.pytest_cache', '.idea', '.vscode', '.DS_Store'}
+EXCLUDED = {'.git', '__pycache__', 'node_modules', 'venv', '.mypy_cache', '.pytest_cache', '.idea', '.vscode', '.DS_Store', '.npz'}
 
 def build_tree(root_path='.', prefix=''):
     lines = []
