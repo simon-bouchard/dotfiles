@@ -236,3 +236,6 @@ eval "$(zoxide init zsh)"
 
 # uv (Python package manager) - add to PATH
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Add global ruff configuration
+export RUFF_CONFIG="$HOME/.config/ruff/ruff.toml"

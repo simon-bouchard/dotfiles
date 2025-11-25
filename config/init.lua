@@ -283,23 +283,42 @@ vim.api.nvim_create_autocmd("User", {
 
         -- Setup each LSP server using vim.lsp.config
         local servers = {
-            { name = "pyright", cmd = { "pyright-langserver", "--stdio" } }, -- Changed from pylsp
-            { name = "lua_ls",  cmd = { "lua-language-server" } },
-            { name = "ts_ls",   cmd = { "typescript-language-server", "--stdio" } },
-            { name = "html",    cmd = { "vscode-html-language-server", "--stdio" } },
-            { name = "cssls",   cmd = { "vscode-css-language-server", "--stdio" } },
-            { name = "bashls",  cmd = { "bash-language-server", "start" } },
-            { name = "jsonls",  cmd = { "vscode-json-language-server", "--stdio" } },
-            { name = "yamlls",  cmd = { "yaml-language-server", "--stdio" } },
+            {
+                name = "pyright",
+                cmd = { "pyright-langserver", "--stdio" },
+                settings = {
+                    python = {
+                        analysis = {
+                            diagnosticSeverityOverrides = {
+                                reportLineTooLong = "none", -- Disable line length check
+                            }
+                        }
+                    }
+                }
+            },
+            { name = "lua_ls", cmd = { "lua-language-server" } },
+            { name = "ts_ls",  cmd = { "typescript-language-server", "--stdio" } },
+            { name = "html",   cmd = { "vscode-html-language-server", "--stdio" } },
+            { name = "cssls",  cmd = { "vscode-css-language-server", "--stdio" } },
+            { name = "bashls", cmd = { "bash-language-server", "start" } },
+            { name = "jsonls", cmd = { "vscode-json-language-server", "--stdio" } },
+            { name = "yamlls", cmd = { "yaml-language-server", "--stdio" } },
         }
 
         for _, server in ipairs(servers) do
-            vim.lsp.config(server.name, {
+            local config = {
                 cmd = server.cmd,
                 root_markers = { ".git" },
                 on_attach = default_config.on_attach,
                 capabilities = default_config.capabilities,
-            })
+            }
+
+            -- Include settings if they exist
+            if server.settings then
+                config.settings = server.settings
+            end
+
+            vim.lsp.config(server.name, config)
             vim.lsp.enable(server.name)
         end
     end,

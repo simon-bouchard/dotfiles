@@ -3,10 +3,10 @@ target-version = "py39"
 
 [lint]
 select = [
-	"E", # pycodestyle errors
-	"F", # pyflakes
-	"W", # pycodestyle warnings
-	"I", # isort (import sorting)
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "W", # pycodestyle warnings
+    "I", # isort (import sorting)
 ]
 ignore = []
 

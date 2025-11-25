@@ -1,26 +1,29 @@
 #!/bin/bash
 
-DOTFILES="$HOME/dotfiles"
+# Shell config files (from config/)
+shell_files="zshrc tmux.conf vimrc"
 
-# Shell configs
-ln -sf "$DOTFILES/config/zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES/config/tmux.conf" "$HOME/.tmux.conf"
+for file in $shell_files; do
+	ln -sf ~/dotfiles/config/$file ~/.$file
+done
 
-# Vim/Neovim
-ln -sf "$DOTFILES/config/vimrc" "$HOME/.vimrc"
-mkdir -p "$HOME/.config/nvim"
-ln -sf "$DOTFILES/config/init.lua" "$HOME/.config/nvim/init.lua"
+# Git files (from git/)
+git_files="gitconfig gitignore_global"
 
+for file in $git_files; do
+	ln -sf ~/dotfiles/git/$file ~/.$file
+done
+
+# Starship config
 mkdir -p ~/.config
 ln -sf ~/dotfiles/config/starship.toml ~/.config/starship.toml
-ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff.toml
 
-# Git
-ln -sf "$DOTFILES/git/gitconfig" "$HOME/.gitconfig"
-ln -sf "$DOTFILES/git/gitignore_global" "$HOME/.gitignore_global"
+# Ruff config
+mkdir -p ~/.config/ruff
+ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff/ruff.toml
 
-# Starship prompt
-mkdir -p "$HOME/.config"
-ln -sf "$DOTFILES/config/starship.toml" "$HOME/.config/starship.toml"
+# Neovim config
+mkdir -p ~/.config/nvim
+ln -sf ~/dotfiles/config/init.lua ~/.config/nvim/init.lua
 
-echo "✅ Dotfiles symlinked successfully"
+echo "Dotfiles installed"
