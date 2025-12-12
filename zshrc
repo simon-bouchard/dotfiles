@@ -105,15 +105,81 @@ source $ZSH/oh-my-zsh.sh
 # the $ZSH_CUSTOM folder, with .zsh extension. Examples:
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-alias python='python3'
-alias py='python3'
-alias pip='pip3'
+# Basic Aliases
+alias ls="lsd"
 alias la='ls -a'
 alias sl='ls'
 alias dc='cd'
-alias xcopy='xclip -selection clipboard'
-alias tree="python3 ~/dotfiles/tree.py"
+alias v="vim"
+alias ..="cd .."
+alias ...="cd ../.."
+alias c="cat"
+alias t="tmux"
+alias ta="tmux attach"
+alias so="source"
+alias tl="tail -f"
+
+# Python Stuff
+alias python='python3'
+alias py='python3'
+alias pip='pip3'
+alias ca="conda activate"
+alias cdv="conda deactivate"
+alias uvr="uvicorn main:app --reload"
+alias uv="uvicorn"
+
+# Docker Aliases
+alias dk="docker"
+alias dps="docker ps"
+alias dcm="docker compose"
+alias dlog="docker logs -f"
+
+# Git Aliases
+alias ga="git add"
+alias gaa="git add -A"
+alias gc="git commit -m"
+alias gps="git push"
+alias gpl="git pull"
+alias gs="git status"
+alias gl="git log --oneline --graph --decorate"
+alias gco="git checkout"
+alias gsw="git switch"
+alias gb="git branch"
+
+# Custom Commands and Scripts Aliases
+alias tree="python3 ~/dotfiles/scripts/tree.py"
+alias xcopy='xclip -selection clipboard -i && sleep 0.1'
+
+xcopylarge() {
+    xclip -selection clipboard -i < "$1"
+    echo "Copied $(wc -c < "$1") bytes to clipboard"
+}
+
+# Server Admin Aliases
+alias jl="journalctl -u"
+alias jlf="journalctl -f"
+alias sc="systemctl"
+alias scu="systemctl --user"
+alias scs="systemctl status"
+
+
+jlog() {
+    local service="$1"
+    local lines="$2"
+
+    if [ -z "$service" ]; then
+        echo "Usage: jlog <service> [lines]"
+        return 1
+    fi
+
+    # Default to 100 lines if none provided
+    if [ -z "$lines" ]; then
+        lines=100
+    fi
+
+    journalctl -u "$service.service" -n "$lines" --no-pager -o cat
+}
+
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -142,4 +208,8 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+# Prevent conda from auto-activating "base"
+conda config --set auto_activate_base false
 
+# Always activate bookrec-api on shell startup
+conda activate bookrec-api
