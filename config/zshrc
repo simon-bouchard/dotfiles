@@ -157,6 +157,7 @@ alias gl="git log --oneline --graph --decorate"
 alias gco="git checkout"
 alias gsw="git switch"
 alias gb="git branch"
+alias gm="git merge"
 
 # Custom Commands and Scripts Aliases
 alias tree="python3 ~/dotfiles/scripts/tree.py"
