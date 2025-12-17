@@ -5,9 +5,9 @@ $character
 
 [hostname]
 ssh_only = true
-ssh_symbol = "🌐 "
-format = "[$hostname]($style) "
-style = "bold green"
+ssh_symbol = "🌐 "                          # or use a nerd font icon
+format = "[$ssh_symbol$hostname]($style) "
+style = "bold red"
 
 [directory]
 truncation_length = 4
