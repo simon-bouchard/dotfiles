@@ -7,10 +7,12 @@ $character
 truncation_length = 4
 truncation_symbol = "…/"
 style = "cyan"
+format = "[ $path]($style) "
 
 [git_branch]
 style = "yellow"
-symbol = ""  # remove nerd font icon
+symbol = " "
+format = "[$symbol$branch]($style) "
 
 [git_status]
 conflicted = "!"
@@ -21,12 +23,12 @@ untracked = "?"
 stashed = "≡"
 modified = "*"
 staged = "+"
-format = "([$all_status$ahead_behind]($style)) "
+format = "([$all_status$ahead_behind]($style))"
 style = "red"
 
 [conda]
-symbol = ""  # no emoji
-format = " [$environment]($style) "
+symbol = "󰏖 "
+format = " [$symbol$environment]($style) "
 
 [python]
 disabled = true
@@ -36,8 +38,7 @@ success_symbol = "[❯](bold green) "
 error_symbol = "[❯](bold green) "
 
 [cmd_duration]
-min_time = 5000  # show only if >5s
+min_time = 5000            # show only if >5s
 show_milliseconds = false
 format = "took $duration "
 style = "bold yellow"
-
