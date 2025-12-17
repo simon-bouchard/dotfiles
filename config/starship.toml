@@ -1,7 +1,13 @@
 format = """
-$directory$git_branch$git_status$conda$cmd_duration
+$hostname$directory$git_branch$git_status$conda$cmd_duration
 $character
 """
+
+[hostname]
+ssh_only = true
+ssh_symbol = "🌐 "
+format = "[$hostname]($style) "
+style = "bold green"
 
 [directory]
 truncation_length = 4
