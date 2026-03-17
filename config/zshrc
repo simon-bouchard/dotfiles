@@ -138,7 +138,7 @@ alias pip='pip3'
 alias ca="conda activate"
 alias cdv="conda deactivate"
 alias uvr="uvicorn main:app --reload"
-alias uv="uvicorn"
+alias uvi="uvicorn"
 
 # Docker Aliases
 alias dk="docker"
