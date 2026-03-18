@@ -286,15 +286,6 @@ vim.api.nvim_create_autocmd("User", {
             {
                 name = "pyright",
                 cmd = { "pyright-langserver", "--stdio" },
-                settings = {
-                    python = {
-                        analysis = {
-                            diagnosticSeverityOverrides = {
-                                reportLineTooLong = "none", -- Disable line length check
-                            }
-                        }
-                    }
-                }
             },
             { name = "lua_ls", cmd = { "lua-language-server" } },
             { name = "ts_ls",  cmd = { "typescript-language-server", "--stdio" } },

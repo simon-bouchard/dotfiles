@@ -11,16 +11,23 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-	"E", # pycodestyle errors
-	"F", # pyflakes
-	"W", # pycodestyle warnings
-	"I", # isort (import sorting)
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "W", # pycodestyle warnings
+    "I", # isort (import sorting)
 ]
 ignore = []
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pyright]
+pythonVersion = "3.9"
+typeCheckingMode = "basic"
+
+[tool.pyright.diagnosticSeverityOverrides]
+reportLineTooLong = "none"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
