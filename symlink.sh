@@ -26,4 +26,7 @@ ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff/ruff.toml
 mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/config/init.lua ~/.config/nvim/init.lua
 
+mkdir -p ~/.claude
+ln -sf ~/dotfiles/claude/commands ~/.claude/commands
+
 echo "Dotfiles installed"
