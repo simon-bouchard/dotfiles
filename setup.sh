@@ -134,6 +134,16 @@ else
     echo "xclip is already installed."
 fi
 
+# Install Neovim (via PPA for current version — apt default is too old)
+if ! command -v nvim >/dev/null 2>&1; then
+    echo "Installing Neovim..."
+    sudo add-apt-repository ppa:neovim-ppa/unstable -y
+    sudo apt update
+    sudo apt install -y neovim
+else
+    echo "Neovim is already installed."
+fi
+
 # ===== NEW PYTHON TOOLING =====
 
 # Install uv (Python package manager)
@@ -155,7 +165,7 @@ fi
 # Install Python development tools via pip
 echo "Installing Python development tools..."
 python3 -m pip install --user --upgrade pip
-python3 -m pip install --user ruff pyright pre-commit debugpy
+python3 -m pip install --user ruff pyright pre-commit debugpy pyperclip
 
 # Install zoxide (smart cd)
 if ! command -v zoxide >/dev/null 2>&1; then
@@ -190,6 +200,6 @@ echo ""
 echo "Next steps:"
 echo "1. Run ./symlink.sh to link dotfiles"
 echo "2. Restart your shell or run: source ~/.zshrc"
-echo "3. Open Neovim - plugins will auto-install via Mason"
+echo "3. Open Neovim - lazy.nvim will bootstrap itself, then plugins auto-install"
 echo "4. In your projects, run: pre-commit install"
 echo ""
