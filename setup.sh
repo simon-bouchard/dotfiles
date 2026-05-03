@@ -60,6 +60,9 @@ install_plugin "$AUTOSUGGESTIONS_REPO" "zsh-autosuggestions"
 install_plugin "$SYNTAX_HIGHLIGHTING_REPO" "zsh-syntax-highlighting"
 install_plugin "$FAST_SYNTAX_HIGHLIGHTING_REPO" "fast-syntax-highlighting"
 install_plugin "$AUTOCOMPLETE_REPO" "zsh-autocomplete"
+install_plugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
+install_plugin "https://github.com/zsh-users/zsh-history-substring-search" "zsh-history-substring-search"
+install_plugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 
 echo "Zsh, Oh My Zsh, and Zsh plugins installed!"
 
@@ -132,6 +135,22 @@ if ! command -v xclip >/dev/null 2>&1; then
     sudo apt install -y xclip
 else
     echo "xclip is already installed."
+fi
+
+# Install fzf (required by fzf-tab)
+if ! command -v fzf >/dev/null 2>&1; then
+    echo "Installing fzf..."
+    sudo apt install -y fzf
+else
+    echo "fzf is already installed."
+fi
+
+# Install direnv
+if ! command -v direnv >/dev/null 2>&1; then
+    echo "Installing direnv..."
+    sudo apt install -y direnv
+else
+    echo "direnv is already installed."
 fi
 
 # Install Neovim (via PPA for current version — apt default is too old)
