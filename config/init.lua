@@ -55,6 +55,7 @@ require("lazy").setup({
                     "bashls",
                     "jsonls",
                     "yamlls",
+                    "clangd",
                 },
                 automatic_installation = true,
             })
@@ -294,6 +295,7 @@ vim.api.nvim_create_autocmd("User", {
             { name = "bashls", cmd = { "bash-language-server", "start" } },
             { name = "jsonls", cmd = { "vscode-json-language-server", "--stdio" } },
             { name = "yamlls", cmd = { "yaml-language-server", "--stdio" } },
+            { name = "clangd", cmd = { "clangd" } },
         }
 
         for _, server in ipairs(servers) do
