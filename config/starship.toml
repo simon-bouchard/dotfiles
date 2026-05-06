@@ -1,5 +1,5 @@
 format = """
-$hostname$directory$git_branch$git_status$conda$cmd_duration
+$hostname$directory$git_branch$git_status$conda$python$cmd_duration
 $character
 """
 
@@ -37,7 +37,11 @@ symbol = " "
 format = " [$symbol$environment]($style) "
 
 [python]
-disabled = true
+format = "[ $virtualenv]($style) "
+style = "dimmed cyan"
+detect_files = []
+detect_extensions = []
+detect_folders = [".venv", "venv"]
 
 [character]
 success_symbol = "[❯](bold green) "
