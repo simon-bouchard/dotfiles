@@ -33,4 +33,10 @@ ln -sf ~/dotfiles/claude/CLAUDE.md ~/.claude/CLAUDE.md
 mkdir -p ~/.claude
 ln -sf ~/dotfiles/claude/commands ~/.claude/commands
 
+# Alacritty config (native Ubuntu only)
+if ! grep -q microsoft /proc/version 2>/dev/null; then
+    mkdir -p ~/.config/alacritty
+    ln -sf ~/dotfiles/config/alacritty.toml ~/.config/alacritty/alacritty.toml
+fi
+
 echo "Dotfiles installed"
