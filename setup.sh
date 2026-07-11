@@ -211,6 +211,41 @@ else
     echo "Node.js is already installed."
 fi
 
+# ===== NATIVE UBUNTU ONLY =====
+if ! grep -q microsoft /proc/version 2>/dev/null; then
+
+    # Alacritty
+    if ! command -v alacritty >/dev/null 2>&1; then
+        echo "Installing Alacritty..."
+        sudo add-apt-repository -y ppa:aslatter/ppa
+        sudo apt update
+        sudo apt install -y alacritty
+    else
+        echo "Alacritty is already installed."
+    fi
+
+    # Caps Lock → Escape remap
+    echo "Remapping Caps Lock to Escape..."
+    gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
+
+    # nvtop (GPU monitor)
+    if ! command -v nvtop >/dev/null 2>&1; then
+        echo "Installing nvtop..."
+        sudo apt install -y nvtop
+    else
+        echo "nvtop is already installed."
+    fi
+
+    # Timeshift (system snapshots)
+    if ! command -v timeshift >/dev/null 2>&1; then
+        echo "Installing Timeshift..."
+        sudo apt install -y timeshift
+    else
+        echo "Timeshift is already installed."
+    fi
+
+fi
+
 echo ""
 echo "===================="
 echo "Machine setup complete!"
