@@ -251,6 +251,31 @@ vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>", { desc = "Step out" })
 vim.keymap.set("n", "<leader>dt", ":DapTerminate<CR>", { desc = "Terminate debugging" })
 vim.keymap.set("n", "<leader>dr", ":DapToggleRepl<CR>", { desc = "Toggle REPL" })
 
+-- clangd header/source switch
+local function switch_source_header()
+    local clients = vim.lsp.get_clients({ bufnr = 0, name = "clangd" })
+    if #clients == 0 then
+        vim.notify("clangd not attached to this buffer", vim.log.levels.WARN)
+        return
+    end
+    local client = clients[1]
+    client:request("textDocument/switchSourceHeader",
+        vim.lsp.util.make_text_document_params(),
+        function(err, result)
+            if err then
+                vim.notify("clangd switch error: " .. vim.inspect(err), vim.log.levels.ERROR)
+                return
+            end
+            if not result then
+                vim.notify("No corresponding header/source file found")
+                return
+            end
+            vim.cmd("edit " .. vim.uri_to_fname(result))
+        end, 0)
+end
+
+vim.keymap.set("n", "<leader>h", switch_source_header, { desc = "Switch header/source (clangd)" })
+
 require('lualine').setup({
     options = {
         icons_enabled = true,
