@@ -334,7 +334,9 @@ vim.api.nvim_create_autocmd("User", {
         for _, server in ipairs(servers) do
             local config = {
                 cmd = server.cmd,
-                root_markers = { ".git" },
+                root_markers = server.name == "clangd"
+                    and { "compile_commands.json", ".git" }
+                    or { ".git" },
                 on_attach = default_config.on_attach,
                 capabilities = default_config.capabilities,
             }
