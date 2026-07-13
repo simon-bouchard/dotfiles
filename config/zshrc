@@ -104,6 +104,15 @@ jlog() {
     journalctl -u "$service.service" -n "$lines" --no-pager -o cat
 }
 
+# C++ functions
+cppsan() {
+    if [ -z "$1" ]; then
+        echo "usage: cppsan <file.cpp>"
+        return 1
+    fi
+    g++ -std=c++23 -Wall -Wextra -fsanitize=address,undefined -o a.out "$1" && ./a.out
+}
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
