@@ -69,7 +69,8 @@ alias gb="git branch"
 alias gm="git merge"
 
 # C++ Aliases
-alias g++="g++ -std=c++20"
+alias g++="g++ -std=c++23"
+alias c++="c++ -std=c++23"
 
 # Custom Commands and Scripts Aliases
 alias tree="python3 ~/dotfiles/scripts/tree.py"
