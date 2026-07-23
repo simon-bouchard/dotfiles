@@ -249,6 +249,11 @@ vim.diagnostic.config({
     update_in_insert = false,
 })
 
+-- Diagnostic keymaps (global: works for linter-only diagnostics too, not just LSP)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { noremap = true, silent = true })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { noremap = true, silent = true })
+
 -- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>", ":echo 'Use h'<CR>")
 vim.keymap.set("n", "<Right>", ":echo 'Use l'<CR>")
@@ -327,9 +332,6 @@ vim.api.nvim_create_autocmd("User", {
             vim.keymap.set('n', '<leader>f', function()
                 vim.lsp.buf.format { async = true }
             end, bufopts)
-            vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, bufopts)
-            vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
-            vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
         end
 
         local capabilities = cmp_nvim_lsp.default_capabilities()
