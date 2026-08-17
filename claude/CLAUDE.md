@@ -1,7 +1,7 @@
 # Global Claude Code Instructions
 
 ## Environment
-- OS: WSL Ubuntu on Windows
+@~/.claude/CLAUDE.local.md
 - Shell: zsh + Oh-My-Zsh, tmux
 - Editor: Neovim with Pyright (LSP) and Ruff (format + lint on save)
 - Python tooling: uv for new projects, conda or pip may be present in existing ones

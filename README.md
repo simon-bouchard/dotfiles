@@ -106,12 +106,6 @@ pyright
 - `.pre-commit-config.yaml` - Git hooks template
 - `.ruff.toml` - Ruff config template
 
-## Utilities
-
-**tree.py** - Copy project structure to clipboard
-**extract_kaggle_code.py** - Extract code from Kaggle notebooks
-**extract_kaggle_cells.py** - Extract all cells from notebooks
-
 ## LSP Servers (Auto-installed via Mason)
 
 - Pyright (Python - type checking)

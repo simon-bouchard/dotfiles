@@ -39,6 +39,12 @@ ln -sf ~/dotfiles/claude/CLAUDE.md ~/.claude/CLAUDE.md
 mkdir -p ~/.claude
 ln -sf ~/dotfiles/claude/commands ~/.claude/commands
 
+# Machine-local Claude context (not tracked - copied once, then yours to edit)
+if [ ! -f ~/.claude/CLAUDE.local.md ]; then
+	cp ~/dotfiles/templates/CLAUDE.local.example.md ~/.claude/CLAUDE.local.md
+	echo "Created ~/.claude/CLAUDE.local.md - edit it with this machine's OS before use"
+fi
+
 # Alacritty config (native Ubuntu only)
 if ! grep -q microsoft /proc/version 2>/dev/null; then
     mkdir -p ~/.config/alacritty
