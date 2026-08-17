@@ -14,6 +14,12 @@ for file in $git_files; do
 	ln -sf ~/dotfiles/git/$file ~/.$file
 done
 
+# Machine-local git identity (not tracked - copied once, then yours to edit)
+if [ ! -f ~/.gitconfig.local ]; then
+	cp ~/dotfiles/templates/gitconfig.local.example ~/.gitconfig.local
+	echo "Created ~/.gitconfig.local - edit it with your name/email before committing"
+fi
+
 # Starship config
 mkdir -p ~/.config
 ln -sf ~/dotfiles/config/starship.toml ~/.config/starship.toml

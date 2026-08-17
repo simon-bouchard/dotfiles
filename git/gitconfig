@@ -1,19 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
 
-[user]
-	name = Simon Bouchard
-	email = simon.bouchard31@gmail.com
-
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-
-
 [color]
     ui = auto
 
@@ -36,5 +23,6 @@ tool = meld
 
 [url "git@github.com:"]
 	pushInsteadOf = https://github.com/
-[safe]
-	directory = /home/simon/dotfiles
+
+[include]
+	path = ~/.gitconfig.local
