@@ -148,7 +148,6 @@ ta          = tmux attach
 ### Tools
 ```bash
 v           = nvim
-tree        = python ~/dotfiles/tree.py
 ```
 
 ## File Locations
