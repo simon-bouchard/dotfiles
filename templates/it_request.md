@@ -1,29 +1,19 @@
 # IT install request (work machine)
 
-Draft list of everything `setup.sh` normally installs, for a machine where I don't have
-sudo/curl access. Run `scripts/check_env.sh` first and cross out anything it reports `[OK]`
-before sending this along.
+Everything I need installed that I can't get myself without sudo/curl access.
+(zsh, xclip, python3, and git are already on this machine.)
 
 ## Standard apt packages (no special repo needed)
-- zsh
 - tmux
-- meld
-- xclip
 - fzf
 - direnv
 - btop
-- python3, python3-pip, python3-venv
 
 ## Needs a third-party repo added first (`add-apt-repository`)
 - neovim (`ppa:neovim-ppa/unstable`)
-- alacritty (`ppa:aslatter/ppa`)
-
-## snap install
-- lsd
 
 ## Native-Ubuntu extras
-- nvtop (apt)
-- timeshift (apt)
+- nvtop (apt) - TUI (terminal-based, not a GUI) GPU monitor, same idea as btop but for the GPU
 - caps-lock -> escape remap (user-level `gsettings`, no install needed, but check it isn't locked down by policy)
 
 ## Curl-piped installers (write to $HOME, no root, but fetched via curl)
@@ -31,7 +21,6 @@ before sending this along.
 - starship
 - uv
 - zoxide
-- JetBrainsMono Nerd Font (GitHub release zip)
 - Node.js (nodesource setup script, then apt install nodejs - also needs root for the apt step)
 
 ## git clone from GitHub (oh-my-zsh plugins, no root, needs GitHub reachability)
@@ -46,9 +35,6 @@ before sending this along.
 ## pip installs (needs PyPI reachability)
 - ruff
 - pyright
-- pre-commit
-- debugpy
-- pyperclip
 
 ## Shell change
 - `chsh -s $(which zsh)` - needs zsh already listed in /etc/shells; may or may not need root

@@ -27,7 +27,7 @@ source ~/.zshrc
 **Terminal**: Tmux with sensible defaults
 **Editor**: Neovim with LSP, debugging, format-on-save
 **Python**: Ruff (linting/formatting), Pyright (LSP), uv (package manager), pre-commit
-**Tools**: lsd, meld, btop, xclip utilities
+**Tools**: lsd, btop, xclip utilities
 
 ## Key Bindings
 

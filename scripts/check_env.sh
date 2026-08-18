@@ -62,7 +62,6 @@ check_cmd nvim
 echo ""
 echo "=== CLI tools ==="
 check_cmd lsd
-check_cmd meld
 check_cmd xclip
 check_cmd fzf
 check_cmd direnv
@@ -79,7 +78,6 @@ check_cmd ruff
 check_cmd pyright
 check_cmd pre-commit
 check_pip_pkg debugpy
-check_pip_pkg pyperclip
 
 echo ""
 echo "=== Node ==="

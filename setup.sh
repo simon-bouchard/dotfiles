@@ -120,15 +120,6 @@ else
     echo "lsd is already installed."
 fi
 
-# Meld installation
-if ! command -v meld >/dev/null 2>&1; then
-    echo "Installing meld..."
-    sudo apt update -y
-    sudo apt install -y meld
-else
-    echo "Meld is already installed."
-fi
-
 # xclip installation (for clipboard operations)
 if ! command -v xclip >/dev/null 2>&1; then
     echo "Installing xclip..."
@@ -184,7 +175,7 @@ fi
 # Install Python development tools via pip
 echo "Installing Python development tools..."
 python3 -m pip install --user --upgrade pip
-python3 -m pip install --user ruff pyright pre-commit debugpy pyperclip
+python3 -m pip install --user ruff pyright pre-commit debugpy
 
 # Install zoxide (smart cd)
 if ! command -v zoxide >/dev/null 2>&1; then
