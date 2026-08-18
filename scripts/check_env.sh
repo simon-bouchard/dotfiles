@@ -50,7 +50,7 @@ echo "  default shell: $SHELL"
 echo ""
 echo "=== Zsh plugins ==="
 PLUGIN_DIR="$HOME/.oh-my-zsh/custom/plugins"
-for p in zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete fzf-tab zsh-history-substring-search zsh-completions; do
+for p in zsh-autosuggestions fast-syntax-highlighting zsh-autocomplete zsh-history-substring-search zsh-completions; do
     check_path "$p" "$PLUGIN_DIR/$p"
 done
 
