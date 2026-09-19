@@ -6,7 +6,7 @@ Terminal-focused development environment for Ubuntu/Debian with Python, Zsh, and
 
 ```bash
 # Clone repo
-git clone <your-repo-url> ~/dotfiles
+git clone github.com/simon-bouchard/dotfiles ~/dotfiles
 cd ~/dotfiles
 
 # First time setup (installs tools)
