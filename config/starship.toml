@@ -13,11 +13,11 @@ style = "bold red"
 truncation_length = 4
 truncation_symbol = "…/"
 style = "cyan"
-format = "[ $path]($style) "
+format = "[$path]($style) "
 
 [git_branch]
 style = "yellow"
-symbol = " "
+symbol = ""
 format = "[$symbol$branch]($style) "
 
 [git_status]
@@ -33,7 +33,7 @@ format = "([$all_status$ahead_behind]($style))"
 style = "red"
 
 [conda]
-symbol = " "
+symbol = ""
 format = " [$symbol$environment]($style) "
 
 [python]
@@ -44,8 +44,8 @@ detect_extensions = []
 detect_folders = [".venv", "venv"]
 
 [character]
-success_symbol = "[❯](bold green) "
-error_symbol = "[❯](bold green) "
+success_symbol = "[>](bold green) "
+error_symbol = "[>](bold red) "
 
 [cmd_duration]
 min_time = 5000            # show only if >5s

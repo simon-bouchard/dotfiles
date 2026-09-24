@@ -6,6 +6,7 @@
 
 [core]
     autocrlf = input
+	editor = nvim
 
 [alias]
     co = checkout
@@ -26,3 +27,5 @@ tool = meld
 
 [include]
 	path = ~/.gitconfig.local
+[credential]
+	helper = store

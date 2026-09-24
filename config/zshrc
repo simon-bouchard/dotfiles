@@ -1,5 +1,10 @@
+skip_global_compinit=1
+
 # Add local bin directories to PATH
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+# The n-managed node install lives separately from the standalone
+# /usr/local/bin/node binary and is the only place npm/npx are actually
+# installed -- prepend it so it wins and node/npm/npx all resolve together.
+export PATH="/usr/local/n/versions/node/18.16.0/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -7,8 +12,17 @@ export ZSH="$HOME/.oh-my-zsh"
 #enable vim keybindings
 bindkey -v
 
+# Ctrl-Backspace sends ^H (not DEL like plain Backspace). zsh vi mode binds
+# ^H to vi-backward-delete-char (single char) by default; rebind it to word
+# delete to match ^W. (The equivalent readline binding lives in ~/.inputrc,
+# which only applies to bash/readline programs, not zsh's line editor.)
+bindkey -M viins '^H' vi-backward-kill-word
+
 # Prompt custom
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
+
+zstyle ':completion:*' use-cache on
+ZSH_DISABLE_COMPFIX=true
 
 plugins=(
   git
@@ -22,12 +36,53 @@ plugins=(
 zstyle ':autocomplete:*' ignored-input 'direnv: *'
 
 #source oh-my-zsh
+ZSH_DISABLE_COMPFIX=true
+skip_global_compinit=1
+
+# /usr/share/zsh/vendor-completions/_antigravity is owned by root and we
+# have no sudo, so `compaudit` always flags it. ZSH_DISABLE_COMPFIX only
+# guards Oh My Zsh's OWN compinit call, not zsh-autocomplete's separate
+# internal one, and a `-u` flag only silences the audit for a single
+# invocation, not for later calls made by other plugins.
+#
+# Simplest fix: drop the offending directory from $fpath entirely, before
+# ANY compinit call happens. compaudit only flags directories it's asked to
+# scan, so if it's not in $fpath, nothing will ever prompt about it, no
+# matter who runs compinit or how many times.
+fpath=(${fpath:#/usr/share/zsh/vendor-completions})
+
+autoload -Uz compinit
+compinit -C
+
 source $ZSH/oh-my-zsh.sh
+
+# oh-my-zsh's lib/key-bindings.zsh unconditionally calls `bindkey -e`,
+# which runs after (and wins over) the `bindkey -v` above, silently
+# switching the shell's actual active keymap to emacs no matter what
+# was set earlier. Re-assert vi mode here so it actually sticks; this
+# just re-links `main` to the already-customized `viins`/`vicmd`
+# keymaps, it doesn't wipe bindings set on them earlier in this file.
+bindkey -v
+
+# zsh-autocomplete's arrow keys for navigating its live suggestion menu
+# (down-line-or-select / up-line-or-search) are bound with `bindkey -M
+# main ...`, not `-M viins` (see its Functions/Init/.autocomplete__key-
+# bindings). That runs while oh-my-zsh.sh is sourced above, at which point
+# `main` is still aliased to `emacs` (oh-my-zsh's key-bindings.zsh aliased
+# it there before plugins loaded), so the bindings land in the emacs
+# keymap. The `bindkey -v` just above re-aliases `main` -> `viins`, but
+# that doesn't retroactively move bindings already written into emacs's
+# table, so viins -- the keymap actually active while typing -- never
+# gets them, and the arrow keys fall back to default vi-mode behavior
+# instead of moving through the suggestion menu. Rebind them explicitly.
+bindkey -M viins '^[[A' up-line-or-search
+bindkey -M viins '^[OA' up-line-or-search
+bindkey -M viins '^[[B' down-line-or-select
+bindkey -M viins '^[OB' down-line-or-select
 
 # User configuration
 
 # Basic Aliases
-alias ls="lsd"
 alias la='ls -a'
 alias sl='ls'
 alias dc='cd'
@@ -39,6 +94,7 @@ alias t="tmux"
 alias ta="tmux attach"
 alias so="source"
 alias tl="tail -f"
+alias glow="glow -s ~/.config/glow/no-margin.json"
 
 # Python Stuff
 alias python='python3'
@@ -149,6 +205,37 @@ eval "$(direnv hook zsh)"
 # Zoxide (smart cd)
 eval "$(zoxide init zsh)"
 
+# Swallow terminal focus-in/out reporting (ESC[I / ESC[O). tmux's
+# focus-events option (enabled unconditionally by tmux-sensible, for vim's
+# autoread) can leave the outer terminal emitting these after detach. With
+# vi keybindings, an unbound ESC[I is read as bare ESC (-> vi command mode)
+# followed by literal "I" (vi's "insert at start of line"), scrambling
+# whatever gets typed next. Binding the full sequence makes zle consume it
+# as one unit instead of falling back to that per-byte reinterpretation.
+_focus_event_noop() { :; }
+zle -N _focus_event_noop
+bindkey -M viins '^[[I' _focus_event_noop
+bindkey -M viins '^[[O' _focus_event_noop
+bindkey -M vicmd '^[[I' _focus_event_noop
+bindkey -M vicmd '^[[O' _focus_event_noop
+
+# tmux's `set -g mouse on` enables xterm any-motion mouse tracking
+# (ESC[?1003h) on the outer terminal. tmux is supposed to disable it again
+# on detach, but on this tmux version that doesn't always happen reliably,
+# so the terminal keeps reporting every mouse move as a raw ESC[M<button>
+# <x><y> triplet straight into the bare zsh prompt (shows up as garbage
+# like a literal "C" plus unprintable bytes). Re-sending the disable codes
+# before every prompt is a no-op if tracking was never left on, so it's
+# safe to run unconditionally -- only needed outside tmux, where tracking
+# is intentionally active.
+if [[ -z "$TMUX" ]]; then
+    _reset_stray_mouse_tracking() {
+        printf '\033[?1000l\033[?1002l\033[?1003l\033[?1006l\033[?1015l'
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook precmd _reset_stray_mouse_tracking
+fi
+
 # uv (Python package manager) - add to PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -157,3 +244,42 @@ export RUFF_CONFIG="$HOME/.config/ruff/ruff.toml"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
+
+# --- Tokyo Night terminal colors (VTE escape sequences) ---
+# Sets background/foreground/16-color ANSI palette directly via OSC codes.
+# Works regardless of GNOME Terminal profile settings. Only runs in
+# interactive shells inside a real terminal (skips e.g. tmux control mode,
+# non-interactive scripts, dumb terminals). Skipped inside tmux: $TERM there
+# is tmux-256color (not "dumb"), so without this check the block re-fires on
+# every new pane/window; sent raw (unwrapped in tmux's passthrough escape)
+# that can leave stray bytes that land as garbage input in the pane. The
+# outer, non-tmux shell already sets these once before you attach/create
+# tmux panes, so re-running inside tmux is redundant anyway.
+if [[ $- == *i* && -t 1 && "$TERM" != "dumb" && -z "$TMUX" ]]; then
+    # Background / foreground / cursor
+    printf '\033]11;#1a1b26\007'   # background (Tokyo Night NIGHT - darkest variant)
+    printf '\033]10;#c0caf5\007'   # foreground
+    printf '\033]12;#c0caf5\007'   # cursor
+
+    # ANSI 0-15 palette (night variant)
+    printf '\033]4;0;#15161e\007'
+    printf '\033]4;1;#f7768e\007'
+    printf '\033]4;2;#9ece6a\007'
+    printf '\033]4;3;#e0af68\007'
+    printf '\033]4;4;#7aa2f7\007'
+    printf '\033]4;5;#bb9af7\007'
+    printf '\033]4;6;#7dcfff\007'
+    printf '\033]4;7;#a9b1d6\007'
+    printf '\033]4;8;#414868\007'
+    printf '\033]4;9;#f7768e\007'
+    printf '\033]4;10;#9ece6a\007'
+    printf '\033]4;11;#e0af68\007'
+    printf '\033]4;12;#7aa2f7\007'
+    printf '\033]4;13;#bb9af7\007'
+    printf '\033]4;14;#7dcfff\007'
+    printf '\033]4;15;#c0caf5\007'
+fi
+# --- end Tokyo Night terminal colors ---
+export PATH="$HOME/.local/bin:$PATH"
+
+[ -f ~/.config/secrets/atlassian.env ] && source ~/.config/secrets/atlassian.env

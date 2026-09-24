@@ -61,14 +61,12 @@ check_cmd nvim
 
 echo ""
 echo "=== CLI tools ==="
-check_cmd lsd
 check_cmd xclip
 check_cmd fzf
 check_cmd direnv
 check_cmd zoxide
 check_cmd btop
 check_cmd git
-check_cmd gh
 
 echo ""
 echo "=== Python tooling ==="
@@ -76,8 +74,6 @@ check_cmd python3
 check_cmd uv
 check_cmd ruff
 check_cmd pyright
-check_cmd pre-commit
-check_pip_pkg debugpy
 
 echo ""
 echo "=== Node ==="
@@ -85,21 +81,11 @@ check_cmd node
 check_cmd npm
 
 echo ""
-echo "=== Fonts ==="
-if fc-list 2>/dev/null | grep -qi "JetBrainsMono"; then
-    echo "[OK]      JetBrainsMono Nerd Font"
-    ok=$((ok+1))
-else
-    echo "[MISSING] JetBrainsMono Nerd Font"
-    missing=$((missing+1))
-fi
 
 if ! grep -q microsoft /proc/version 2>/dev/null; then
     echo ""
     echo "=== Native Linux only ==="
-    check_cmd alacritty
     check_cmd nvtop
-    check_cmd timeshift
 fi
 
 echo ""

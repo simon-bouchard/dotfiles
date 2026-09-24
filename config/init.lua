@@ -27,15 +27,12 @@ require("lazy").setup({
         build = ":TSUpdate",
     },
 
-    -- Telescope
+    -- Telescope (pinned: latest requires nvim 0.11+, this machine is capped at 0.10)
     {
         "nvim-telescope/telescope.nvim",
+        tag = "0.1.8",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            {
-                "nvim-telescope/telescope-fzf-native.nvim",
-                build = "make",
-            },
         },
         config = function()
             local telescope = require("telescope")
@@ -44,7 +41,6 @@ require("lazy").setup({
                     file_ignore_patterns = { "%.git/" },
                 },
             })
-            telescope.load_extension("fzf")
 
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
@@ -82,14 +78,6 @@ require("lazy").setup({
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "pyright",
-                    "lua_ls",
-                    "ts_ls",
-                    "html",
-                    "cssls",
-                    "bashls",
-                    "jsonls",
-                    "yamlls",
-                    "clangd",
                 },
                 automatic_installation = true,
             })
@@ -129,7 +117,7 @@ require("lazy").setup({
     "hrsh7th/cmp-path",
     "L3MON4D3/LuaSnip",
 
-    -- Formatting (NEW)
+    -- Formatting
     {
         "stevearc/conform.nvim",
         config = function()
@@ -145,7 +133,7 @@ require("lazy").setup({
         end
     },
 
-    -- Linting (UPDATED)
+    -- Linting
     {
         "mfussenegger/nvim-lint",
         config = function()
@@ -168,7 +156,7 @@ require("lazy").setup({
         end
     },
 
-    -- Debugging (NEW)
+    -- Debugging
     {
         "mfussenegger/nvim-dap",
         dependencies = {
@@ -179,10 +167,8 @@ require("lazy").setup({
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- Setup UI
             dapui.setup()
 
-            -- Auto-open/close UI
             dap.listeners.after.event_initialized["dapui_config"] = function()
                 dapui.open()
             end
@@ -271,7 +257,7 @@ vim.keymap.set("n", "<leader>p", function()
     print("paste = " .. (vim.opt.paste:get() and "ON" or "OFF"))
 end)
 
--- Debugging keybindings (NEW)
+-- Debugging keybindings
 vim.keymap.set("n", "<leader>b", ":DapToggleBreakpoint<CR>", { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<leader>dc", ":DapContinue<CR>", { desc = "Start/Continue debugging" })
 vim.keymap.set("n", "<leader>di", ":DapStepInto<CR>", { desc = "Step into" })
@@ -280,46 +266,24 @@ vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>", { desc = "Step out" })
 vim.keymap.set("n", "<leader>dt", ":DapTerminate<CR>", { desc = "Terminate debugging" })
 vim.keymap.set("n", "<leader>dr", ":DapToggleRepl<CR>", { desc = "Toggle REPL" })
 
--- clangd header/source switch
-local function switch_source_header()
-    local clients = vim.lsp.get_clients({ bufnr = 0, name = "clangd" })
-    if #clients == 0 then
-        vim.notify("clangd not attached to this buffer", vim.log.levels.WARN)
-        return
-    end
-    local client = clients[1]
-    client:request("textDocument/switchSourceHeader",
-        vim.lsp.util.make_text_document_params(),
-        function(err, result)
-            if err then
-                vim.notify("clangd switch error: " .. vim.inspect(err), vim.log.levels.ERROR)
-                return
-            end
-            if not result then
-                vim.notify("No corresponding header/source file found")
-                return
-            end
-            vim.cmd("edit " .. vim.uri_to_fname(result))
-        end, 0)
-end
-
-vim.keymap.set("n", "<leader>h", switch_source_header, { desc = "Switch header/source (clangd)" })
-
 require('lualine').setup({
     options = {
-        icons_enabled = true,
+        icons_enabled = false,
         theme = 'tokyonight',
     }
 })
 
 -- ============================================================================
--- LSP HANDLERS (runs after all plugins load)
+-- LSP SETUP (nvim-lspconfig classic API — this machine is capped at nvim 0.10,
+-- vim.lsp.config/vim.lsp.enable are 0.11+ only)
 -- ============================================================================
 
 vim.api.nvim_create_autocmd("User", {
     pattern = "VeryLazy",
     callback = function()
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        local lspconfig = require("lspconfig")
+        local capabilities = cmp_nvim_lsp.default_capabilities()
 
         local on_attach = function(client, bufnr)
             local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -334,46 +298,9 @@ vim.api.nvim_create_autocmd("User", {
             end, bufopts)
         end
 
-        local capabilities = cmp_nvim_lsp.default_capabilities()
-
-        local default_config = {
+        lspconfig.pyright.setup({
             on_attach = on_attach,
             capabilities = capabilities,
-        }
-
-        -- Setup each LSP server using vim.lsp.config
-        local servers = {
-            {
-                name = "pyright",
-                cmd = { "pyright-langserver", "--stdio" },
-            },
-            { name = "lua_ls", cmd = { "lua-language-server" } },
-            { name = "ts_ls",  cmd = { "typescript-language-server", "--stdio" } },
-            { name = "html",   cmd = { "vscode-html-language-server", "--stdio" } },
-            { name = "cssls",  cmd = { "vscode-css-language-server", "--stdio" } },
-            { name = "bashls", cmd = { "bash-language-server", "start" } },
-            { name = "jsonls", cmd = { "vscode-json-language-server", "--stdio" } },
-            { name = "yamlls", cmd = { "yaml-language-server", "--stdio" } },
-            { name = "clangd", cmd = { "clangd" } },
-        }
-
-        for _, server in ipairs(servers) do
-            local config = {
-                cmd = server.cmd,
-                root_markers = server.name == "clangd"
-                    and { "compile_commands.json", ".git" }
-                    or { ".git" },
-                on_attach = default_config.on_attach,
-                capabilities = default_config.capabilities,
-            }
-
-            -- Include settings if they exist
-            if server.settings then
-                config.settings = server.settings
-            end
-
-            vim.lsp.config(server.name, config)
-            vim.lsp.enable(server.name)
-        end
+        })
     end,
 })
