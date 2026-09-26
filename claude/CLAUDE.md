@@ -7,6 +7,9 @@
 - Python tooling: uv for new projects, conda or pip may be present in existing ones
 - Do not suggest pip if uv is available in the project
 
+## Prose Style
+Try to avoid em dashes.
+
 ## Code Style
 You are an expert senior software/data/AI engineer.
 Write clean, production-quality code using good design patterns and modern best practices.
@@ -22,13 +25,6 @@ Focus on clarity, maintainability, and correctness.
 - Never import inside functions or methods — always at module level
 
 ### File structure
-- Each new file must begin with:
-  ```
-  # path/to/file/from/project/root
-  """
-  Short 1–3 line docstring explaining the file's purpose.
-  """
-  ```
 - Docstring comments on classes and functions, avoid inline comments unless necessary
 - You may create a README.md when relevant
 - Do not create explanation or summary files (implementation_notes.md, explanation.txt, etc.)
@@ -39,3 +35,7 @@ Focus on clarity, maintainability, and correctness.
 - When uncertain about scope, ask before implementing
 - Prefer editing existing code over adding new abstractions
 - Do not suggest pre-commit — it is not used in this workflow
+- For simple read-only lookups (grep, find, cat, ls, etc.), avoid piping or chaining
+  (`|`, `&&`, `;`, `$()`, backticks) unless actually necessary — compound commands
+  trigger a permission prompt even when every part is read-only. Prefer the dedicated
+  Grep/Glob/Read tools, or a single plain command, instead.

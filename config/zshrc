@@ -24,6 +24,21 @@ zstyle ':autocomplete:*' ignored-input 'direnv: *'
 #source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
+# oh-my-zsh's lib/key-bindings.zsh runs `bindkey -e`, overriding the `bindkey -v` above.
+# Re-assert vi mode now that it has loaded.
+bindkey -v
+
+# zsh-autocomplete binds its menu arrow keys on `main` while it is still aliased to emacs,
+# so viins never gets them. Rebind explicitly.
+bindkey -M viins '^[[A' up-line-or-search
+bindkey -M viins '^[OA' up-line-or-search
+bindkey -M viins '^[[B' down-line-or-select
+bindkey -M viins '^[OB' down-line-or-select
+
+# Ctrl-Backspace: word delete in vi insert mode (terminals send ^H or ESC-DEL)
+bindkey -M viins '^H' vi-backward-kill-word
+bindkey -M viins '^[^?' vi-backward-kill-word
+
 # User configuration
 
 # Basic Aliases
@@ -148,6 +163,16 @@ eval "$(direnv hook zsh)"
 
 # Zoxide (smart cd)
 eval "$(zoxide init zsh)"
+
+# Swallow terminal focus reports (ESC[I / ESC[O) left on by tmux focus-events. Unbound in vi
+# mode they read as ESC (command mode) + "I"/"O", scrambling the next input.
+_focus_event_noop() { :; }
+zle -N _focus_event_noop
+for _km in viins vicmd; do
+    bindkey -M $_km '^[[I' _focus_event_noop
+    bindkey -M $_km '^[[O' _focus_event_noop
+done
+unset _km
 
 # uv (Python package manager) - add to PATH
 export PATH="$HOME/.cargo/bin:$PATH"

@@ -1,11 +1,10 @@
 [core]
 	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	editor = nvim
 
 [color]
     ui = auto
-
-[core]
-  autocrlf = true
 
 [alias]
     co = checkout
