@@ -150,7 +150,7 @@ else
     echo "Neovim is already installed."
 fi
 
-# ===== NEW PYTHON TOOLING =====
+# ===== PYTHON TOOLING =====
 
 # Install uv (Python package manager)
 if ! command -v uv >/dev/null 2>&1; then
@@ -160,18 +160,24 @@ else
     echo "uv is already installed."
 fi
 
-# Ensure Python3 and pip are installed
+# Ensure Python3 is installed
 if ! command -v python3 >/dev/null 2>&1; then
     echo "Installing Python3..."
-    sudo apt install -y python3 python3-pip python3-venv
+    sudo apt install -y python3 python3-venv
 else
     echo "Python3 is already installed."
 fi
 
-# Install Python development tools via pip
-echo "Installing Python development tools..."
-python3 -m pip install --user --upgrade pip
-python3 -m pip install --user ruff pyright pre-commit debugpy
+# Install Python dev tools as isolated uv tools (pip --user is blocked on newer Ubuntu)
+export PATH="$HOME/.local/bin:$PATH"
+for tool in ruff pyright pre-commit debugpy; do
+    if uv tool list 2>/dev/null | grep -q "^$tool "; then
+        echo "$tool is already installed."
+    else
+        echo "Installing $tool..."
+        uv tool install "$tool"
+    fi
+done
 
 # Install zoxide (smart cd)
 if ! command -v zoxide >/dev/null 2>&1; then

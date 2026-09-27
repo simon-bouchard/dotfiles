@@ -30,17 +30,6 @@ check_path() {
     fi
 }
 
-check_pip_pkg() {
-    local name="$1"
-    if python3 -m pip show "$name" >/dev/null 2>&1; then
-        echo "[OK]      python package: $name"
-        ok=$((ok+1))
-    else
-        echo "[MISSING] python package: $name"
-        missing=$((missing+1))
-    fi
-}
-
 echo "=== Shell ==="
 check_cmd zsh
 check_path "oh-my-zsh" "$HOME/.oh-my-zsh"
@@ -77,7 +66,7 @@ check_cmd uv
 check_cmd ruff
 check_cmd pyright
 check_cmd pre-commit
-check_pip_pkg debugpy
+check_cmd debugpy-adapter
 
 echo ""
 echo "=== Node ==="

@@ -193,7 +193,7 @@ require("lazy").setup({
         "mfussenegger/nvim-dap-python",
         dependencies = { "mfussenegger/nvim-dap" },
         config = function()
-            require("dap-python").setup("python3")
+            require("dap-python").setup("debugpy-adapter")
         end
     },
 })
