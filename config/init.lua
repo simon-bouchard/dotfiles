@@ -20,6 +20,22 @@ require("lazy").setup({
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = { "markdown", "markdown_inline" },
+            })
+        end,
+    },
+
+    -- Markdown rendering in the buffer (raw text shown on the cursor line and in insert mode)
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        ft = { "markdown" },
+        opts = {},
+        keys = {
+            { "<leader>m", "<cmd>RenderMarkdown toggle<CR>", desc = "Toggle markdown rendering" },
+        },
     },
 
     -- Telescope
