@@ -72,6 +72,7 @@ alias t="tmux"
 alias ta="tmux attach"
 alias so="source"
 alias tl="tail -f"
+alias glow="glow -s ~/.config/glow/no-margin.json"
 
 # Python Stuff
 alias python='python3'

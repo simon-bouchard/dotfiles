@@ -195,6 +195,19 @@ else
     echo "btop is already installed."
 fi
 
+# Install glow (terminal markdown viewer, from Charm's apt repo)
+if ! command -v glow >/dev/null 2>&1; then
+    echo "Installing glow..."
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" \
+        | sudo tee /etc/apt/sources.list.d/charm.list >/dev/null
+    sudo apt update
+    sudo apt install -y glow
+else
+    echo "glow is already installed."
+fi
+
 # Install Node.js if not present (needed for some LSP servers)
 if ! command -v node >/dev/null 2>&1; then
     echo "Installing Node.js..."

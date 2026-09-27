@@ -24,6 +24,10 @@ fi
 mkdir -p ~/.config
 ln -sf ~/dotfiles/config/starship.toml ~/.config/starship.toml
 
+# Glow style (dark theme without margins, so copied text has no leading spaces)
+mkdir -p ~/.config/glow
+ln -sf ~/dotfiles/config/glow-no-margin.json ~/.config/glow/no-margin.json
+
 # Ruff config
 mkdir -p ~/.config/ruff
 ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff/ruff.toml
