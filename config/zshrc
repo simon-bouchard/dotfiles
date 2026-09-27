@@ -16,7 +16,6 @@ plugins=(
   zsh-autosuggestions
   fast-syntax-highlighting
   zsh-autocomplete
-  zsh-history-substring-search
   zsh-completions
 )
 
@@ -35,6 +34,24 @@ bindkey -M viins '^[[A' up-line-or-search
 bindkey -M viins '^[OA' up-line-or-search
 bindkey -M viins '^[[B' down-line-or-select
 bindkey -M viins '^[OB' down-line-or-select
+bindkey -M viins '^R' history-incremental-search-backward
+bindkey -M viins '^S' menu-search
+
+# Switch modes on Esc without the default 0.4s wait for a multi-key sequence
+KEYTIMEOUT=1
+
+# Cursor shows the vi mode: bar in insert, block in command mode and while commands run
+_vi_cursor() {
+    if [[ $KEYMAP == vicmd ]]; then
+        printf '\e[2 q'
+    else
+        printf '\e[6 q'
+    fi
+}
+_block_cursor() { printf '\e[2 q'; }
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget line-init _vi_cursor
+add-zle-hook-widget line-finish _block_cursor
 
 # Ctrl-Backspace: word delete in vi insert mode (terminals send ^H or ESC-DEL)
 bindkey -M viins '^H' vi-backward-kill-word
@@ -139,6 +156,14 @@ nvm() {
 
 # Starship Prompt
 eval "$(starship init zsh)"
+
+# Vi-mode cursor on mode switch. Set as a plain widget after starship (instead of a zle hook)
+# so starship's own keymap-select wrapping can't recurse; reset-prompt is what starship's did.
+_vi_keymap_select() {
+    _vi_cursor
+    zle reset-prompt
+}
+zle -N zle-keymap-select _vi_keymap_select
 
 # Direnv
 export DIRENV_LOG_FORMAT=""

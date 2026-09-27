@@ -58,7 +58,6 @@ install_plugin() {
 install_plugin "$AUTOSUGGESTIONS_REPO" "zsh-autosuggestions"
 install_plugin "$FAST_SYNTAX_HIGHLIGHTING_REPO" "fast-syntax-highlighting"
 install_plugin "$AUTOCOMPLETE_REPO" "zsh-autocomplete"
-install_plugin "https://github.com/zsh-users/zsh-history-substring-search" "zsh-history-substring-search"
 install_plugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 
 echo "Zsh, Oh My Zsh, and Zsh plugins installed!"
