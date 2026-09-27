@@ -1,5 +1,28 @@
 vim.g.mapleader = " "
 
+-- Machine-specific options from ~/.config/nvim/local.lua (untracked, see
+-- templates/nvim-local.example.lua). Neovim version differences are detected instead.
+local machine = { nerd_font = true }
+local local_config = vim.fn.stdpath("config") .. "/local.lua"
+if vim.uv.fs_stat(local_config) then
+    machine = vim.tbl_extend("force", machine, dofile(local_config))
+end
+local has_nvim_011 = vim.fn.has("nvim-0.11") == 1
+
+-- LSP servers and their commands (commands are used with the 0.11+ vim.lsp.config API)
+local lsp_cmds = {
+    pyright = { "pyright-langserver", "--stdio" },
+    lua_ls = { "lua-language-server" },
+    ts_ls = { "typescript-language-server", "--stdio" },
+    html = { "vscode-html-language-server", "--stdio" },
+    cssls = { "vscode-css-language-server", "--stdio" },
+    bashls = { "bash-language-server", "start" },
+    jsonls = { "vscode-json-language-server", "--stdio" },
+    yamlls = { "yaml-language-server", "--stdio" },
+    clangd = { "clangd" },
+}
+local lsp_servers = machine.lsp_servers or vim.tbl_keys(lsp_cmds)
+
 -- lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
@@ -33,20 +56,26 @@ require("lazy").setup({
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         ft = { "markdown" },
-        opts = {},
+        opts = machine.nerd_font and {} or {
+            heading = { icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " } },
+            checkbox = { unchecked = { icon = "[ ] " }, checked = { icon = "[x] " } },
+            link = { enabled = false },
+        },
         keys = {
             { "<leader>m", "<cmd>RenderMarkdown toggle<CR>", desc = "Toggle markdown rendering" },
         },
     },
 
-    -- Telescope
+    -- Telescope (latest needs nvim 0.11+, so pin the last compatible release on older versions)
     {
         "nvim-telescope/telescope.nvim",
+        tag = not has_nvim_011 and "0.1.8" or nil,
         dependencies = {
             "nvim-lua/plenary.nvim",
             {
                 "nvim-telescope/telescope-fzf-native.nvim",
                 build = "make",
+                cond = vim.fn.executable("make") == 1 and vim.fn.executable("cc") == 1,
             },
         },
         config = function()
@@ -56,7 +85,7 @@ require("lazy").setup({
                     file_ignore_patterns = { "%.git/" },
                 },
             })
-            telescope.load_extension("fzf")
+            pcall(telescope.load_extension, "fzf")
 
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
@@ -92,17 +121,7 @@ require("lazy").setup({
         },
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "pyright",
-                    "lua_ls",
-                    "ts_ls",
-                    "html",
-                    "cssls",
-                    "bashls",
-                    "jsonls",
-                    "yamlls",
-                    "clangd",
-                },
+                ensure_installed = lsp_servers,
                 automatic_installation = true,
             })
         end
@@ -301,26 +320,32 @@ local function switch_source_header()
         return
     end
     local client = clients[1]
-    client:request("textDocument/switchSourceHeader",
-        vim.lsp.util.make_text_document_params(),
-        function(err, result)
-            if err then
-                vim.notify("clangd switch error: " .. vim.inspect(err), vim.log.levels.ERROR)
-                return
-            end
-            if not result then
-                vim.notify("No corresponding header/source file found")
-                return
-            end
-            vim.cmd("edit " .. vim.uri_to_fname(result))
-        end, 0)
+    local method = "textDocument/switchSourceHeader"
+    local params = vim.lsp.util.make_text_document_params()
+    local function handler(err, result)
+        if err then
+            vim.notify("clangd switch error: " .. vim.inspect(err), vim.log.levels.ERROR)
+            return
+        end
+        if not result then
+            vim.notify("No corresponding header/source file found")
+            return
+        end
+        vim.cmd("edit " .. vim.uri_to_fname(result))
+    end
+    -- Client methods take self from 0.11; on 0.10 request is a plain function field
+    if has_nvim_011 then
+        client:request(method, params, handler, 0)
+    else
+        client.request(method, params, handler, 0)
+    end
 end
 
 vim.keymap.set("n", "<leader>h", switch_source_header, { desc = "Switch header/source (clangd)" })
 
 require('lualine').setup({
     options = {
-        icons_enabled = true,
+        icons_enabled = machine.nerd_font,
         theme = 'tokyonight',
     }
 })
@@ -349,44 +374,22 @@ vim.api.nvim_create_autocmd("User", {
 
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
-        local default_config = {
-            on_attach = on_attach,
-            capabilities = capabilities,
-        }
-
-        -- Setup each LSP server using vim.lsp.config
-        local servers = {
-            {
-                name = "pyright",
-                cmd = { "pyright-langserver", "--stdio" },
-            },
-            { name = "lua_ls", cmd = { "lua-language-server" } },
-            { name = "ts_ls",  cmd = { "typescript-language-server", "--stdio" } },
-            { name = "html",   cmd = { "vscode-html-language-server", "--stdio" } },
-            { name = "cssls",  cmd = { "vscode-css-language-server", "--stdio" } },
-            { name = "bashls", cmd = { "bash-language-server", "start" } },
-            { name = "jsonls", cmd = { "vscode-json-language-server", "--stdio" } },
-            { name = "yamlls", cmd = { "yaml-language-server", "--stdio" } },
-            { name = "clangd", cmd = { "clangd" } },
-        }
-
-        for _, server in ipairs(servers) do
+        for _, name in ipairs(lsp_servers) do
             local config = {
-                cmd = server.cmd,
-                root_markers = server.name == "clangd"
-                    and { "compile_commands.json", ".git" }
-                    or { ".git" },
-                on_attach = default_config.on_attach,
-                capabilities = default_config.capabilities,
+                on_attach = on_attach,
+                capabilities = capabilities,
             }
-
-            -- Include settings if they exist
-            if server.settings then
-                config.settings = server.settings
+            if has_nvim_011 then
+                config.cmd = lsp_cmds[name]
+                config.root_markers = name == "clangd"
+                    and { "compile_commands.json", ".git" }
+                    or { ".git" }
+                vim.lsp.config(name, config)
+                vim.lsp.enable(name)
+            else
+                -- vim.lsp.config/enable are 0.11+; use nvim-lspconfig's classic setup API
+                require("lspconfig")[name].setup(config)
             end
-
-            vim.lsp.config(server.name, config)
-            vim.lsp.enable(server.name)
         end
     end,
 })

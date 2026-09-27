@@ -21,6 +21,10 @@ plugins=(
 
 zstyle ':autocomplete:*' ignored-input 'direnv: *'
 
+# Machine-specific settings (untracked, see templates/zshrc.local.example). Sourced before
+# oh-my-zsh so it can adjust fpath, compinit and STARSHIP_CONFIG.
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
 #source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -60,7 +64,7 @@ bindkey -M viins '^[^?' vi-backward-kill-word
 # User configuration
 
 # Basic Aliases
-alias ls="lsd"
+command -v lsd >/dev/null 2>&1 && alias ls="lsd"
 alias la='ls -a'
 alias sl='ls'
 alias dc='cd'

@@ -1,0 +1,12 @@
+# Machine-specific zsh settings - not tracked by the dotfiles repo.
+# Copied once to ~/.zshrc.local by symlink.sh, then yours to edit freely.
+# Sourced by ~/.zshrc after the base PATH is set and before oh-my-zsh loads.
+
+# Extra PATH entries, e.g. a system-wide node install
+# path=(/usr/local/n/versions/node/18.16.0/bin $path)
+
+# No Nerd Font on this machine: use the ASCII prompt
+# export STARSHIP_CONFIG=~/.config/starship-ascii.toml
+
+# Secrets kept outside the repo
+# [[ -f ~/.config/secrets/example.env ]] && source ~/.config/secrets/example.env

@@ -1,0 +1,54 @@
+# ASCII variant of starship.toml for terminals without a Nerd Font.
+# Enable per machine in ~/.zshrc.local: export STARSHIP_CONFIG=~/.config/starship-ascii.toml
+
+format = """
+$hostname$directory$git_branch$git_status$python$cmd_duration
+$character
+"""
+
+[hostname]
+ssh_only = true
+ssh_symbol = "🌐 "                          # or use a nerd font icon
+format = "[$ssh_symbol$hostname]($style) "
+style = "bold red"
+
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+style = "cyan"
+format = "[$path]($style) "
+
+[git_branch]
+style = "yellow"
+symbol = ""
+format = "[$symbol$branch]($style) "
+
+[git_status]
+conflicted = "!"
+ahead = "↑"
+behind = "↓"
+diverged = "↕"
+untracked = "?"
+stashed = "≡"
+modified = "*"
+staged = "+"
+format = "([$all_status$ahead_behind]($style))"
+style = "red"
+
+[python]
+format = "[ $virtualenv]($style) "
+style = "dimmed cyan"
+detect_files = []
+detect_extensions = []
+detect_folders = [".venv", "venv"]
+
+[character]
+success_symbol = "[>](bold green) "
+error_symbol = "[>](bold green) "
+vimcmd_symbol = "[<](bold green) "
+
+[cmd_duration]
+min_time = 5000            # show only if >5s
+show_milliseconds = false
+format = "took $duration "
+style = "bold yellow"

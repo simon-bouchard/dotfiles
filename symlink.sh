@@ -20,9 +20,16 @@ if [ ! -f ~/.gitconfig.local ]; then
 	echo "Created ~/.gitconfig.local - edit it with your name/email before committing"
 fi
 
-# Starship config
+# Machine-local zsh settings (not tracked - copied once, then yours to edit)
+if [ ! -f ~/.zshrc.local ]; then
+	cp ~/dotfiles/templates/zshrc.local.example ~/.zshrc.local
+	echo "Created ~/.zshrc.local - add this machine's PATH, secrets and overrides"
+fi
+
+# Starship config (ASCII variant for machines without a Nerd Font, see ~/.zshrc.local)
 mkdir -p ~/.config
 ln -sf ~/dotfiles/config/starship.toml ~/.config/starship.toml
+ln -sf ~/dotfiles/config/starship-ascii.toml ~/.config/starship-ascii.toml
 
 # Glow style (dark theme without margins, so copied text has no leading spaces)
 mkdir -p ~/.config/glow
@@ -35,6 +42,12 @@ ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff/ruff.toml
 # Neovim config
 mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/config/init.lua ~/.config/nvim/init.lua
+
+# Machine-local Neovim options (not tracked - copied once, then yours to edit)
+if [ ! -f ~/.config/nvim/local.lua ]; then
+	cp ~/dotfiles/templates/nvim-local.example.lua ~/.config/nvim/local.lua
+	echo "Created ~/.config/nvim/local.lua - set nerd_font = false if the terminal lacks one"
+fi
 
 # Claude global config and commands
 mkdir -p ~/.claude

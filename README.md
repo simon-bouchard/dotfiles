@@ -29,6 +29,20 @@ source ~/.zshrc
 **Python**: Ruff (linting/formatting), Pyright (LSP), uv (package manager), pre-commit
 **Tools**: lsd, btop, glow (markdown viewer), xclip utilities
 
+## Machine-specific Config
+
+Tracked files are shared by every machine. Per-machine settings live in untracked files that
+`symlink.sh` creates once from `templates/`:
+
+| File | For |
+|---|---|
+| `~/.zshrc.local` | Extra PATH entries, secrets, terminal workarounds, `STARSHIP_CONFIG=~/.config/starship-ascii.toml` without a Nerd Font |
+| `~/.config/nvim/local.lua` | `nerd_font = false` for plain icons, `lsp_servers` to limit installed LSPs |
+| `~/.gitconfig.local` | Git identity, credential helpers |
+| `~/.claude/CLAUDE.local.md` | Machine context for Claude Code (OS, terminal, work tools) |
+
+Neovim 0.10 vs 0.11+ differences (LSP API, telescope version) are detected automatically.
+
 ## Key Bindings
 
 ### Tmux
