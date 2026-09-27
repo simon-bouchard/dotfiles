@@ -1,5 +1,5 @@
 format = """
-$hostname$directory$git_branch$git_status$conda$python$cmd_duration
+$hostname$directory$git_branch$git_status$python$cmd_duration
 $character
 """
 
@@ -31,10 +31,6 @@ modified = "*"
 staged = "+"
 format = "([$all_status$ahead_behind]($style))"
 style = "red"
-
-[conda]
-symbol = " "
-format = " [$symbol$environment]($style) "
 
 [python]
 format = "[ $virtualenv]($style) "

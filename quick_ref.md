@@ -116,8 +116,6 @@ tmux split-window -h
 ```bash
 py          = python3
 pip         = pip3
-ca          = conda activate
-cdv         = conda deactivate
 ```
 
 ### Navigation
