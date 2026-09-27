@@ -16,9 +16,10 @@ require("lazy").setup({
     "nvim-lualine/lualine.nvim",
     "folke/tokyonight.nvim",
 
-    -- Treesitter
+    -- Treesitter (master: the default branch is now the incompatible "main" rewrite)
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "master",
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
