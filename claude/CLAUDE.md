@@ -34,7 +34,9 @@ Focus on clarity, maintainability, and correctness.
 - No emojis in code or files
 - When uncertain about scope, ask before implementing
 - Prefer editing existing code over adding new abstractions
-- Do not suggest pre-commit — it is not used in this workflow
+- Ask for approval before any git operation that changes history or reaches a remote:
+  commit, push, merge, rebase, reset, cherry-pick, tag, branch deletion, force operations
+- Never add a Co-Authored-By or other Claude attribution line to commit messages or PR descriptions
 - For simple read-only lookups (grep, find, cat, ls, etc.), avoid piping or chaining
   (`|`, `&&`, `;`, `$()`, backticks) unless actually necessary — compound commands
   trigger a permission prompt even when every part is read-only. Prefer the dedicated
