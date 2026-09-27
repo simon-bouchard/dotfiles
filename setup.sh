@@ -98,6 +98,7 @@ else
 
     # Extract (quietly, overwrite OK)
     unzip -o "$JETBRAINS_ZIP" -d JetBrainsMono >/dev/null
+    rm -f "$JETBRAINS_ZIP"
 
     # Refresh font cache
     fc-cache -fv >/dev/null
