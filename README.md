@@ -6,7 +6,7 @@ Terminal-focused development environment for Ubuntu/Debian with Python, Zsh, and
 
 ```bash
 # Clone repo
-git clone github.com/simon-bouchard/dotfiles ~/dotfiles
+git clone https://github.com/simon-bouchard/dotfiles ~/dotfiles
 cd ~/dotfiles
 
 # First time setup (installs tools)
@@ -63,8 +63,8 @@ source .venv/bin/activate
 uv pip install numpy pandas
 
 # Copy template files
-cp ~/dotfiles/pyproject.toml .
-cp ~/dotfiles/.pre-commit-config.yaml .
+cp ~/dotfiles/templates/pyproject.toml .
+cp ~/dotfiles/templates/.pre-commit-config.yaml .
 
 # Setup pre-commit hooks
 pre-commit install
@@ -97,14 +97,15 @@ pyright
 
 ## Files
 
-- `zshrc` - Shell config with aliases, zoxide, uv
-- `tmux.conf` - Tmux configuration
-- `init.lua` - Neovim setup (LSP, DAP, format-on-save)
-- `gitconfig` - Git aliases and settings
-- `starship.toml` - Prompt styling
-- `pyproject.toml` - Python project template
-- `.pre-commit-config.yaml` - Git hooks template
-- `.ruff.toml` - Ruff config template
+- `config/zshrc` - Shell config with aliases, zoxide, uv
+- `config/tmux.conf` - Tmux configuration
+- `config/init.lua` - Neovim setup (LSP, DAP, format-on-save)
+- `config/starship.toml` - Prompt styling
+- `config/ruff.toml` - Global Ruff config (via `RUFF_CONFIG`)
+- `git/gitconfig` - Git aliases and settings (identity goes in `~/.gitconfig.local`)
+- `claude/` - Global Claude Code instructions and commands
+- `templates/pyproject.toml` - Python project template
+- `templates/.pre-commit-config.yaml` - Git hooks template
 
 ## LSP Servers (Auto-installed via Mason)
 
