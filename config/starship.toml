@@ -42,6 +42,7 @@ detect_folders = [".venv", "venv"]
 [character]
 success_symbol = "[❯](bold green) "
 error_symbol = "[❯](bold green) "
+vimcmd_symbol = "[❮](bold green) "
 
 [cmd_duration]
 min_time = 5000            # show only if >5s
