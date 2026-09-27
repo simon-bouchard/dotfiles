@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 
 -- lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git", "clone", "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
@@ -15,11 +15,6 @@ require("lazy").setup({
     -- UI & Appearance
     "nvim-lualine/lualine.nvim",
     "folke/tokyonight.nvim",
-    "morhetz/gruvbox",
-    "dracula/vim",
-    "arcticicestudio/nord-vim",
-    "joshdick/onedark.vim",
-    "rose-pine/neovim",
 
     -- Treesitter
     {
@@ -225,13 +220,16 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.backspace = { "indent", "eol", "start" }
 
-vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = "unnamedplus"
 vim.opt.mouse = "a"
 
 -- Strip trailing whitespace on save
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
     callback = function()
+        if not vim.bo.modifiable then
+            return
+        end
         local save_cursor = vim.fn.getpos(".")
         vim.cmd([[%s/\s\+$//e]])
         vim.fn.setpos(".", save_cursor)
@@ -239,8 +237,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 vim.cmd.colorscheme "tokyonight"
--- Other options: "gruvbox", "dracula", "nord", "onedark", "rose-pine"
--- Change above line to try different themes
 
 vim.diagnostic.config({
     virtual_text = true,
@@ -251,8 +247,8 @@ vim.diagnostic.config({
 
 -- Diagnostic keymaps (global: works for linter-only diagnostics too, not just LSP)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { noremap = true, silent = true })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { noremap = true, silent = true })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true })
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, { noremap = true, silent = true })
 
 -- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>", ":echo 'Use h'<CR>")
