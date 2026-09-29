@@ -51,39 +51,6 @@ require("lazy").setup({
         end,
     },
 
-    -- LSP & Mason
-    "neovim/nvim-lspconfig",
-    {
-        "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup({
-                ui = {
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "✗"
-                    }
-                }
-            })
-        end
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        dependencies = {
-            "williamboman/mason.nvim",
-            "neovim/nvim-lspconfig",
-            "hrsh7th/cmp-nvim-lsp",
-        },
-        config = function()
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "pyright",
-                },
-                automatic_installation = true,
-            })
-        end
-    },
-
     -- Autocompletion
     {
         "hrsh7th/nvim-cmp",
@@ -271,36 +238,4 @@ require('lualine').setup({
         icons_enabled = false,
         theme = 'tokyonight',
     }
-})
-
--- ============================================================================
--- LSP SETUP (nvim-lspconfig classic API — this machine is capped at nvim 0.10,
--- vim.lsp.config/vim.lsp.enable are 0.11+ only)
--- ============================================================================
-
-vim.api.nvim_create_autocmd("User", {
-    pattern = "VeryLazy",
-    callback = function()
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
-        local lspconfig = require("lspconfig")
-        local capabilities = cmp_nvim_lsp.default_capabilities()
-
-        local on_attach = function(client, bufnr)
-            local bufopts = { noremap = true, silent = true, buffer = bufnr }
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-            vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-            vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-            vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
-            vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-            vim.keymap.set('n', '<leader>f', function()
-                vim.lsp.buf.format { async = true }
-            end, bufopts)
-        end
-
-        lspconfig.pyright.setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-        })
-    end,
 })

@@ -51,9 +51,6 @@ skip_global_compinit=1
 # matter who runs compinit or how many times.
 fpath=(${fpath:#/usr/share/zsh/vendor-completions})
 
-autoload -Uz compinit
-compinit -C
-
 source $ZSH/oh-my-zsh.sh
 
 # oh-my-zsh's lib/key-bindings.zsh unconditionally calls `bindkey -e`,
