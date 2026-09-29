@@ -96,10 +96,11 @@ require("lazy").setup({
         end,
     },
 
-    -- LSP & Mason
+    -- LSP & Mason (v2 of both needs nvim 0.11+, so stay on v1 on older versions)
     "neovim/nvim-lspconfig",
     {
         "williamboman/mason.nvim",
+        version = not has_nvim_011 and "^1.0.0" or nil,
         config = function()
             require("mason").setup({
                 ui = {
@@ -114,6 +115,7 @@ require("lazy").setup({
     },
     {
         "williamboman/mason-lspconfig.nvim",
+        version = not has_nvim_011 and "^1.0.0" or nil,
         dependencies = {
             "williamboman/mason.nvim",
             "neovim/nvim-lspconfig",
@@ -283,8 +285,18 @@ vim.diagnostic.config({
 
 -- Diagnostic keymaps (global: works for linter-only diagnostics too, not just LSP)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
-vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true })
-vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, { noremap = true, silent = true })
+-- vim.diagnostic.jump is 0.11+; goto_prev/goto_next are its deprecated 0.10 equivalents
+local function diagnostic_jump(count)
+    if has_nvim_011 then
+        vim.diagnostic.jump({ count = count, float = true })
+    elseif count < 0 then
+        vim.diagnostic.goto_prev({ float = true })
+    else
+        vim.diagnostic.goto_next({ float = true })
+    end
+end
+vim.keymap.set('n', '[d', function() diagnostic_jump(-1) end, { noremap = true, silent = true })
+vim.keymap.set('n', ']d', function() diagnostic_jump(1) end, { noremap = true, silent = true })
 
 -- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>", ":echo 'Use h'<CR>")
