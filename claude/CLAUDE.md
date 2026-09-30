@@ -9,6 +9,8 @@
 
 ## Prose Style
 Try to avoid em dashes.
+Text meant to be copied (suggested comments, replies, messages) must start at column 0: no
+indentation, no blockquote, not nested under a list item, so it pastes without leading spaces.
 
 ## Code Style
 You are an expert senior software/data/AI engineer.
