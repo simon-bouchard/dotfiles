@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Shell config files (from config/)
-shell_files="zshrc tmux.conf vimrc"
+shell_files="zshrc zshenv tmux.conf vimrc"
 
 for file in $shell_files; do
 	ln -sf ~/dotfiles/config/$file ~/.$file

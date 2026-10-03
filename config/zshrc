@@ -11,12 +11,13 @@ bindkey -v
 # Prompt custom
 PS1='%F{red}%*%f %F{blue}%m%f %F{green}%~%f %F{red}>%f%F{blue}>%f%F{green}>%f '
 
+# Syntax highlighting last so it wraps the final widgets. zsh-autocomplete is sourced
+# separately below, not listed here.
 plugins=(
   git
+  zsh-completions
   zsh-autosuggestions
   fast-syntax-highlighting
-  zsh-autocomplete
-  zsh-completions
 )
 
 zstyle ':autocomplete:*' ignored-input 'direnv: *'
@@ -24,6 +25,20 @@ zstyle ':autocomplete:*' ignored-input 'direnv: *'
 # Machine-specific settings (untracked, see templates/zshrc.local.example). Sourced before
 # oh-my-zsh so it can adjust fpath, compinit and STARSHIP_CONFIG.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# zsh-autocomplete must load before any compinit call, but oh-my-zsh runs compinit before
+# sourcing its plugins. Source it first: it runs its own compinit and turns oh-my-zsh's into
+# a no-op. It also has to precede zsh-autosuggestions, whose ZSH_AUTOSUGGEST_* options it sets.
+# Its zasync dependency (cloned into the cache on first run) goes on fpath first: on zsh 5.8 the
+# plugin's own fallback autoload silently leaves zasync an empty function, so no list ever shows.
+fpath=(${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zasync(N/) $fpath)
+source $ZSH/custom/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+# zsh-autocomplete binds these keys now but defines the widgets at the first prompt, which makes
+# fast-syntax-highlighting warn "unhandled ZLE widget". Placeholders it replaces at that prompt.
+_autocomplete_placeholder() { :; }
+zle -N menu-search _autocomplete_placeholder
+zle -N recent-paths _autocomplete_placeholder
 
 #source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
