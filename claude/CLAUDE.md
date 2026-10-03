@@ -9,6 +9,8 @@
 
 ## Prose Style
 Try to avoid em dashes.
+Text meant to be copied (suggested comments, replies, messages) must start at column 0: no
+indentation, no blockquote, not nested under a list item, so it pastes without leading spaces.
 
 ## Code Style
 You are an expert senior software/data/AI engineer.
@@ -26,6 +28,8 @@ Focus on clarity, maintainability, and correctness.
 
 ### File structure
 - Docstring comments on classes and functions, avoid inline comments unless necessary
+- Cap any comment at 2-3 lines max, in any language. Longer rationale belongs in the chat
+  or PR notes, not the code
 - You may create a README.md when relevant
 - Do not create explanation or summary files (implementation_notes.md, explanation.txt, etc.)
   All rationale belongs in the chat, not in files

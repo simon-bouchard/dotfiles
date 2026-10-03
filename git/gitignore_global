@@ -22,4 +22,6 @@ known_hosts
 # Dev tools/files
 tree.txt
 
+# Claude
 **/.claude/settings.local.json
+/.claude

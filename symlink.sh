@@ -54,7 +54,7 @@ mkdir -p ~/.claude
 ln -sf ~/dotfiles/claude/CLAUDE.md ~/.claude/CLAUDE.md
 
 mkdir -p ~/.claude
-ln -sf ~/dotfiles/claude/commands ~/.claude/commands
+ln -sfn ~/dotfiles/claude/commands ~/.claude/commands
 
 # Machine-local Claude context (not tracked - copied once, then yours to edit)
 if [ ! -f ~/.claude/CLAUDE.local.md ]; then
