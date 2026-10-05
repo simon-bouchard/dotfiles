@@ -23,6 +23,16 @@ local lsp_cmds = {
 }
 local lsp_servers = machine.lsp_servers or vim.tbl_keys(lsp_cmds)
 
+-- render-markdown callouts, rendered as plain titles when there is no Nerd Font
+local plain_callouts = {}
+for _, name in ipairs({
+    "note", "tip", "important", "warning", "caution", "abstract", "summary", "tldr", "info",
+    "todo", "hint", "success", "check", "done", "question", "help", "faq", "attention",
+    "failure", "fail", "missing", "danger", "error", "bug", "example", "quote", "cite",
+}) do
+    plain_callouts[name] = { rendered = (name:gsub("^%l", string.upper)) }
+end
+
 -- lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
@@ -58,8 +68,14 @@ require("lazy").setup({
         ft = { "markdown" },
         opts = machine.nerd_font and {} or {
             heading = { icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " } },
-            checkbox = { unchecked = { icon = "[ ] " }, checked = { icon = "[x] " } },
+            checkbox = {
+                unchecked = { icon = "[ ] " },
+                checked = { icon = "[x] " },
+                custom = { todo = { rendered = "[-] " } },
+            },
+            callout = plain_callouts,
             link = { enabled = false },
+            sign = { enabled = false },
         },
         keys = {
             { "<leader>m", "<cmd>RenderMarkdown toggle<CR>", desc = "Toggle markdown rendering" },
@@ -96,8 +112,11 @@ require("lazy").setup({
         end,
     },
 
-    -- LSP & Mason (v2 of both needs nvim 0.11+, so stay on v1 on older versions)
-    "neovim/nvim-lspconfig",
+    -- LSP & Mason (v2 of all three needs nvim 0.11+, so stay on v1 on older versions)
+    {
+        "neovim/nvim-lspconfig",
+        version = not has_nvim_011 and "^1.0.0" or nil,
+    },
     {
         "williamboman/mason.nvim",
         version = not has_nvim_011 and "^1.0.0" or nil,
