@@ -89,6 +89,9 @@ alias ...="cd ../.."
 alias c="cat"
 alias t="tmux"
 alias ta="tmux attach"
+alias tat="tmux attach-session -t"
+alias tls="tmux list-sessions"
+alias cr="claude --resume"
 alias so="source"
 alias tl="tail -f"
 alias glow="glow -s ~/.config/glow/no-margin.json"
@@ -118,6 +121,17 @@ alias gco="git checkout"
 alias gsw="git switch"
 alias gb="git branch"
 alias gm="git merge"
+
+# Interactive rebase: `grbi 3` rebases the last 3 commits, other args pass through
+# (replaces oh-my-zsh's grbi alias, which would otherwise block the function definition)
+unalias grbi 2>/dev/null
+grbi() {
+    if [[ "$1" == <-> ]]; then
+        git rebase -i "HEAD~$1" "${@:2}"
+    else
+        git rebase -i "$@"
+    fi
+}
 
 # C++ Aliases
 alias g++="g++ -std=c++23"
