@@ -121,6 +121,7 @@ alias gco="git checkout"
 alias gsw="git switch"
 alias gb="git branch"
 alias gm="git merge"
+alias gst="git stash"
 
 # Interactive rebase: `grbi 3` rebases the last 3 commits, other args pass through
 # (replaces oh-my-zsh's grbi alias, which would otherwise block the function definition)
@@ -218,3 +219,9 @@ unset _km
 
 # Add global ruff configuration
 export RUFF_CONFIG="$HOME/.config/ruff/ruff.toml"
+
+# Start a detached tmux server on first shell so continuum restores sessions right away.
+# The unnamed session is "0", which resurrect kills after restoring unless the save has a "0".
+if [[ -z $TMUX ]] && command -v tmux >/dev/null && ! tmux has-session 2>/dev/null; then
+    tmux new-session -d
+fi
