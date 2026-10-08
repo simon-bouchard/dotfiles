@@ -134,6 +134,16 @@ grbi() {
     fi
 }
 
+# Squash the last N commits (default 2) into the oldest one, keeping its message
+gsq() {
+    local n=${1:-2}
+    if [[ "$n" != <-> ]] || (( n < 2 )); then
+        echo "usage: gsq [N>=2]" >&2
+        return 1
+    fi
+    git reset --soft "HEAD~$((n - 1))" && git commit --amend --no-edit
+}
+
 # C++ Aliases
 alias g++="g++ -std=c++23"
 alias c++="c++ -std=c++23"
