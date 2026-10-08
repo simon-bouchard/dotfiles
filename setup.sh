@@ -235,6 +235,12 @@ if ! grep -q microsoft /proc/version 2>/dev/null; then
     echo "Remapping Caps Lock to Escape..."
     gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 
+    # GNOME Terminal: Ctrl+Tab / Ctrl+Shift+Tab to switch tabs
+    echo "Setting GNOME Terminal tab switching keys..."
+    TERM_KEYS="org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/"
+    gsettings set "$TERM_KEYS" next-tab '<Primary>Tab'
+    gsettings set "$TERM_KEYS" prev-tab '<Primary><Shift>Tab'
+
     # nvtop (GPU monitor)
     if ! command -v nvtop >/dev/null 2>&1; then
         echo "Installing nvtop..."
