@@ -112,6 +112,43 @@ require("lazy").setup({
         end,
     },
 
+    -- Git: hunk signs, inline hunk diffs and blame (main needs nvim 0.11+, so pin on older)
+    {
+        "lewis6991/gitsigns.nvim",
+        tag = not has_nvim_011 and "v2.1.0" or nil,
+        config = function()
+            local gitsigns = require("gitsigns")
+            gitsigns.setup()
+
+            local map = vim.keymap.set
+            map("n", "]h", function() gitsigns.nav_hunk("next") end, { desc = "Next git hunk" })
+            map("n", "[h", function() gitsigns.nav_hunk("prev") end, { desc = "Prev git hunk" })
+            map("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Preview git hunk" })
+            map("n", "<leader>gi", gitsigns.preview_hunk_inline, { desc = "Inline git hunk" })
+            map("n", "<leader>gs", gitsigns.stage_hunk, { desc = "Stage git hunk" })
+            map("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Reset git hunk" })
+            map("n", "<leader>gb", gitsigns.blame_line, { desc = "Blame line" })
+            map("n", "<leader>gf", gitsigns.diffthis, { desc = "Diff file against index" })
+        end,
+    },
+
+    -- Git: side-by-side diffs of the whole repo, branches and file history
+    {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+        opts = {
+            use_icons = machine.nerd_font,
+            git_cmd = { machine.diffview_git or "git" },
+        },
+        keys = {
+            { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Diff working tree" },
+            { "<leader>gm", "<cmd>DiffviewOpen origin/HEAD...HEAD<CR>", desc = "Diff branch vs main" },
+            { "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "File history" },
+            { "<leader>gl", "<cmd>DiffviewFileHistory<CR>", desc = "Repo history" },
+            { "<leader>gq", "<cmd>DiffviewClose<CR>", desc = "Close diffview" },
+        },
+    },
+
     -- LSP & Mason (v2 of all three needs nvim 0.11+, so stay on v1 on older versions)
     {
         "neovim/nvim-lspconfig",

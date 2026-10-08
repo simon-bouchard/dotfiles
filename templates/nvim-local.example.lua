@@ -5,4 +5,6 @@ return {
     nerd_font = true,
     -- LSP servers to install and enable; leave unset for the full default list
     -- lsp_servers = { "pyright" },
+    -- git binary for diffview when the system git is older than 2.31
+    -- diffview_git = vim.fn.expand("~/.local/git-env/bin/git"),
 }
