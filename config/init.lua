@@ -111,15 +111,23 @@ require("lazy").setup({
             local actions = require("telescope.actions")
             -- <C-s> for vertical split (matches oil): the terminal grabs <C-v> as paste
             local split_mappings = { ["<C-s>"] = actions.select_vertical }
+            local builtin = require("telescope.builtin")
+            -- File icons come from nvim-web-devicons; disable_devicons is a per-picker option
+            local pickers = {}
+            if not machine.nerd_font then
+                for name in pairs(builtin) do
+                    pickers[name] = { disable_devicons = true }
+                end
+            end
             telescope.setup({
                 defaults = {
                     file_ignore_patterns = { "%.git/" },
                     mappings = { i = split_mappings, n = split_mappings },
                 },
+                pickers = pickers,
             })
             pcall(telescope.load_extension, "fzf")
 
-            local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
             vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Grep files" })
             vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
