@@ -33,6 +33,18 @@ for _, name in ipairs({
     plain_callouts[name] = { rendered = (name:gsub("^%l", string.upper)) }
 end
 
+-- which-key key labels as text when there is no Nerd Font (its defaults are Nerd Font glyphs)
+local plain_keys = { C = "C-", M = "M-", D = "D-", S = "S-" }
+for _, name in ipairs({
+    "Up", "Down", "Left", "Right", "CR", "Esc", "NL", "BS", "Space", "Tab",
+    "ScrollWheelDown", "ScrollWheelUp",
+}) do
+    plain_keys[name] = name .. " "
+end
+for i = 1, 12 do
+    plain_keys["F" .. i] = "F" .. i
+end
+
 -- lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
@@ -96,9 +108,13 @@ require("lazy").setup({
         },
         config = function()
             local telescope = require("telescope")
+            local actions = require("telescope.actions")
+            -- <C-s> for vertical split (matches oil): the terminal grabs <C-v> as paste
+            local split_mappings = { ["<C-s>"] = actions.select_vertical }
             telescope.setup({
                 defaults = {
                     file_ignore_patterns = { "%.git/" },
+                    mappings = { i = split_mappings, n = split_mappings },
                 },
             })
             pcall(telescope.load_extension, "fzf")
@@ -115,6 +131,7 @@ require("lazy").setup({
                 "n", "<leader>f/", builtin.current_buffer_fuzzy_find, { desc = "Search in file" }
             )
             vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Grep word under cursor" })
+            vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "Project diagnostics" })
 
             -- Fresh table per call: Telescope stores per-picker state in the opts it is given
             local function code_symbols()
@@ -147,6 +164,20 @@ require("lazy").setup({
         },
         keys = {
             { "-", "<cmd>Oil<CR>", desc = "Open parent directory" },
+        },
+    },
+
+    -- Keymap hints: pause after a prefix like <leader> to see the keys that can follow
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {
+            spec = {
+                { "<leader>f", group = "find" },
+                { "<leader>g", group = "git" },
+                { "<leader>d", group = "debug" },
+            },
+            icons = machine.nerd_font and {} or { mappings = false, keys = plain_keys },
         },
     },
 
