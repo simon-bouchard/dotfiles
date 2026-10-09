@@ -109,7 +109,45 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
             vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
             vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent files" })
+            vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Find keymaps" })
+            vim.keymap.set("n", "<leader>f.", builtin.resume, { desc = "Resume last picker" })
+            vim.keymap.set(
+                "n", "<leader>f/", builtin.current_buffer_fuzzy_find, { desc = "Search in file" }
+            )
+            vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Grep word under cursor" })
+
+            -- Fresh table per call: Telescope stores per-picker state in the opts it is given
+            local function code_symbols()
+                return { symbols = { "class", "function", "method" } }
+            end
+            vim.keymap.set("n", "<leader>fs", function()
+                builtin.lsp_document_symbols(code_symbols())
+            end, { desc = "Classes/functions in file" })
+            vim.keymap.set(
+                "n", "<leader>fa", builtin.lsp_document_symbols, { desc = "All symbols in file" }
+            )
+            vim.keymap.set("n", "<leader>fS", function()
+                builtin.lsp_dynamic_workspace_symbols(code_symbols())
+            end, { desc = "Classes/functions in project" })
+            vim.keymap.set(
+                "n", "<leader>fA", builtin.lsp_dynamic_workspace_symbols,
+                { desc = "All symbols in project" }
+            )
         end,
+    },
+
+    -- File explorer: directories open as editable buffers, :w applies renames/moves/deletes
+    {
+        "stevearc/oil.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        lazy = false,
+        opts = {
+            columns = machine.nerd_font and { "icon" } or {},
+            view_options = { show_hidden = true },
+        },
+        keys = {
+            { "-", "<cmd>Oil<CR>", desc = "Open parent directory" },
+        },
     },
 
     -- Git: hunk signs, inline hunk diffs and blame (main needs nvim 0.11+, so pin on older)
@@ -340,7 +378,7 @@ vim.diagnostic.config({
 })
 
 -- Diagnostic keymaps (global: works for linter-only diagnostics too, not just LSP)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { silent = true, desc = "Show diagnostic" })
 -- vim.diagnostic.jump is 0.11+; goto_prev/goto_next are its deprecated 0.10 equivalents
 local function diagnostic_jump(count)
     if has_nvim_011 then
@@ -351,8 +389,8 @@ local function diagnostic_jump(count)
         vim.diagnostic.goto_next({ float = true })
     end
 end
-vim.keymap.set('n', '[d', function() diagnostic_jump(-1) end, { noremap = true, silent = true })
-vim.keymap.set('n', ']d', function() diagnostic_jump(1) end, { noremap = true, silent = true })
+vim.keymap.set('n', '[d', function() diagnostic_jump(-1) end, { silent = true, desc = "Prev diagnostic" })
+vim.keymap.set('n', ']d', function() diagnostic_jump(1) end, { silent = true, desc = "Next diagnostic" })
 
 -- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>", ":echo 'Use h'<CR>")
@@ -369,7 +407,7 @@ vim.keymap.set("i", "<Down>", "<ESC>:echo 'Use j'<CR>")
 vim.keymap.set("n", "<leader>p", function()
     vim.opt.paste = not vim.opt.paste:get()
     print("paste = " .. (vim.opt.paste:get() and "ON" or "OFF"))
-end)
+end, { desc = "Toggle paste mode" })
 
 -- Debugging keybindings (NEW)
 vim.keymap.set("n", "<leader>b", ":DapToggleBreakpoint<CR>", { desc = "Toggle breakpoint" })
@@ -419,45 +457,38 @@ require('lualine').setup({
 })
 
 -- ============================================================================
--- LSP HANDLERS (runs after all plugins load)
+-- LSP SETUP (must run before the first buffer loads, or servers start without this config)
 -- ============================================================================
 
-vim.api.nvim_create_autocmd("User", {
-    pattern = "VeryLazy",
-    callback = function()
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-        local on_attach = function(client, bufnr)
-            local bufopts = { noremap = true, silent = true, buffer = bufnr }
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-            vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-            vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-            vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
-            vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-            vim.keymap.set('n', '<leader>f', function()
-                vim.lsp.buf.format { async = true }
-            end, bufopts)
+-- LspAttach fires for every client, however it was started (including mason-lspconfig)
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local function map(lhs, rhs, desc)
+            vim.keymap.set('n', lhs, rhs, { silent = true, buffer = args.buf, desc = desc })
         end
-
-        local capabilities = cmp_nvim_lsp.default_capabilities()
-
-        for _, name in ipairs(lsp_servers) do
-            local config = {
-                on_attach = on_attach,
-                capabilities = capabilities,
-            }
-            if has_nvim_011 then
-                config.cmd = lsp_cmds[name]
-                config.root_markers = name == "clangd"
-                    and { "compile_commands.json", ".git" }
-                    or { ".git" }
-                vim.lsp.config(name, config)
-                vim.lsp.enable(name)
-            else
-                -- vim.lsp.config/enable are 0.11+; use nvim-lspconfig's classic setup API
-                require("lspconfig")[name].setup(config)
-            end
-        end
+        map('gd', vim.lsp.buf.definition, "Go to definition")
+        map('K', vim.lsp.buf.hover, "Hover documentation")
+        map('gi', vim.lsp.buf.implementation, "Go to implementation")
+        map('gr', vim.lsp.buf.references, "List references")
+        map('<leader>rn', vim.lsp.buf.rename, "Rename symbol")
+        map('<leader>ca', vim.lsp.buf.code_action, "Code action")
+        map('<leader>f', function() vim.lsp.buf.format { async = true } end, "Format buffer")
     end,
 })
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+for _, name in ipairs(lsp_servers) do
+    local config = { capabilities = capabilities }
+    if has_nvim_011 then
+        config.cmd = lsp_cmds[name]
+        config.root_markers = name == "clangd"
+            and { "compile_commands.json", ".git" }
+            or { ".git" }
+        vim.lsp.config(name, config)
+        vim.lsp.enable(name)
+    else
+        -- vim.lsp.config/enable are 0.11+; use nvim-lspconfig's classic setup API
+        require("lspconfig")[name].setup(config)
+    end
+end
