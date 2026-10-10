@@ -494,6 +494,10 @@ end
 vim.keymap.set('n', '[d', function() diagnostic_jump(-1) end, { silent = true, desc = "Prev diagnostic" })
 vim.keymap.set('n', ']d', function() diagnostic_jump(1) end, { silent = true, desc = "Next diagnostic" })
 
+-- Half-page jumps keep the cursor centered
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
+
 -- Disable arrow keys (vim training wheels)
 vim.keymap.set("n", "<Left>", ":echo 'Use h'<CR>")
 vim.keymap.set("n", "<Right>", ":echo 'Use l'<CR>")
