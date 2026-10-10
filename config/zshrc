@@ -56,6 +56,19 @@ bindkey -M viins '^[OB' down-line-or-select
 bindkey -M viins '^R' history-incremental-search-backward
 bindkey -M viins '^S' menu-search
 
+# Tab accepts the grey autosuggestion when one is shown, otherwise completes as usual.
+# Ignored by zsh-autosuggestions, whose wrapper would clear POSTDISPLAY before the check.
+_autosuggest_accept_or_complete() {
+    if [[ -n $POSTDISPLAY ]]; then
+        zle autosuggest-accept
+    else
+        zle complete-word
+    fi
+}
+zle -N _autosuggest_accept_or_complete
+ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(_autosuggest_accept_or_complete)
+bindkey -M viins '^I' _autosuggest_accept_or_complete
+
 # Atuin takes over Up (exact-text) and Ctrl-R (fuzzy) history lists, see config/atuin.toml.
 # Must come after the rebinds above to win the keys; Down keeps zsh-autocomplete's menu.
 if (( $+commands[atuin] )); then
