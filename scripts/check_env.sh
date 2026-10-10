@@ -56,6 +56,7 @@ check_cmd xclip
 check_cmd fzf
 check_cmd direnv
 check_cmd zoxide
+check_cmd atuin
 check_cmd btop
 check_cmd glow
 check_cmd git

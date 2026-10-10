@@ -207,6 +207,21 @@ else
     echo "zoxide is already installed."
 fi
 
+# Install Atuin (shell history list on Up/Ctrl-R). Uses the release installer directly: the
+# setup.atuin.sh wrapper edits ~/.zshrc and ~/.bashrc and installs AI agent hooks.
+if ! command -v atuin >/dev/null 2>&1; then
+    echo "Installing Atuin..."
+    curl --proto '=https' --tlsv1.2 -LsSf \
+        https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh \
+        | ATUIN_INSTALL_DIR="$HOME/.local/bin" ATUIN_NO_MODIFY_PATH=1 sh
+    if [ -f "$HOME/.zsh_history" ]; then
+        echo "Importing zsh history into Atuin..."
+        HISTFILE="$HOME/.zsh_history" "$HOME/.local/bin/atuin" import zsh
+    fi
+else
+    echo "Atuin is already installed."
+fi
+
 # Install btop (system monitor - optional)
 if ! command -v btop >/dev/null 2>&1; then
     echo "Installing btop (system monitor)..."

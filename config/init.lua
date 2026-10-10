@@ -476,12 +476,6 @@ vim.keymap.set("i", "<Right>", "<ESC>:echo 'Use l'<CR>")
 vim.keymap.set("i", "<Up>", "<ESC>:echo 'Use k'<CR>")
 vim.keymap.set("i", "<Down>", "<ESC>:echo 'Use j'<CR>")
 
--- Paste mode toggle
-vim.keymap.set("n", "<leader>p", function()
-    vim.opt.paste = not vim.opt.paste:get()
-    print("paste = " .. (vim.opt.paste:get() and "ON" or "OFF"))
-end, { desc = "Toggle paste mode" })
-
 -- Debugging keybindings (NEW)
 vim.keymap.set("n", "<leader>b", ":DapToggleBreakpoint<CR>", { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<leader>dc", ":DapContinue<CR>", { desc = "Start/Continue debugging" })
