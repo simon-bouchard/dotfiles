@@ -56,6 +56,12 @@ bindkey -M viins '^[OB' down-line-or-select
 bindkey -M viins '^R' history-incremental-search-backward
 bindkey -M viins '^S' menu-search
 
+# Atuin takes over Up (exact-text) and Ctrl-R (fuzzy) history lists, see config/atuin.toml.
+# Must come after the rebinds above to win the keys; Down keeps zsh-autocomplete's menu.
+if (( $+commands[atuin] )); then
+    eval "$(atuin init zsh)"
+fi
+
 # Switch modes on Esc without the default 0.4s wait for a multi-key sequence
 KEYTIMEOUT=1
 
@@ -75,6 +81,10 @@ add-zle-hook-widget line-finish _block_cursor
 # Ctrl-Backspace: word delete in vi insert mode (terminals send ^H or ESC-DEL)
 bindkey -M viins '^H' vi-backward-kill-word
 bindkey -M viins '^[^?' vi-backward-kill-word
+
+# Emacs-style start/end of line in insert mode (inside tmux, Ctrl-A is the prefix: press it twice)
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
 
 # User configuration
 

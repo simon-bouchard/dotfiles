@@ -1,0 +1,22 @@
+## Atuin shell history (https://docs.atuin.sh). Only overrides are listed; the rest are defaults.
+
+## Up: exact text anywhere in the command. Ctrl+R: fuzzy. Ctrl+S in the list switches modes
+search_mode_shell_up_key_binding = "fulltext"
+search_mode = "fuzzy"
+
+## List under the prompt instead of full screen, also when opened with the Up arrow
+inline_height = 20
+inline_height_shell_up_key_binding = 20
+
+## Start in vim-insert when opened from zsh's vi insert mode
+keymap_mode = "auto"
+
+## Enter runs the selected command, Tab puts it on the prompt to edit first
+enter_accept = true
+
+## Local only: no account, no sync
+auto_sync = false
+
+## Ctrl+S cycles the search mode in vim-normal too (vim-insert inherits it from emacs)
+[keymap.vim-normal]
+"ctrl-s" = "cycle-search-mode"

@@ -39,6 +39,10 @@ ln -sf ~/dotfiles/config/glow-no-margin.json ~/.config/glow/no-margin.json
 mkdir -p ~/.config/ruff
 ln -sf ~/dotfiles/config/ruff.toml ~/.config/ruff/ruff.toml
 
+# Atuin shell history config
+mkdir -p ~/.config/atuin
+ln -sf ~/dotfiles/config/atuin.toml ~/.config/atuin/config.toml
+
 # Neovim config
 mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/config/init.lua ~/.config/nvim/init.lua
