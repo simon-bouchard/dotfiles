@@ -28,6 +28,14 @@ else
 	echo 'Tmux is already installed.'
 fi
 
+# Install TPM (tmux plugin manager); tmux.conf loads it, then prefix + I installs the plugins
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "Installing TPM..."
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+else
+    echo "TPM is already installed."
+fi
+
 # Install zsh plugins
 
 # Define the Oh My Zsh custom plugin directory
@@ -77,6 +85,17 @@ if ! command -v starship >/dev/null 2>&1; then
 else
     echo "Starship is already installed."
 fi
+
+# CLI dependencies: Telescope (ripgrep, fd-find), Treesitter and fzf-native (build-essential),
+# Mason and the font install below (unzip), nvim-lint (shellcheck)
+for pkg in ripgrep fd-find build-essential unzip shellcheck; do
+    if dpkg -s "$pkg" >/dev/null 2>&1; then
+        echo "$pkg is already installed."
+    else
+        echo "Installing $pkg..."
+        sudo apt install -y "$pkg"
+    fi
+done
 
 # Install JetBrainsMono Nerd Font
 ORIG_DIR="$(pwd)"
@@ -209,11 +228,20 @@ else
     echo "glow is already installed."
 fi
 
-# Install Node.js if not present (needed for some LSP servers)
-if ! command -v node >/dev/null 2>&1; then
-    echo "Installing Node.js..."
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt install -y nodejs
+# Install nvm and the LTS Node.js (needed for some LSP servers). PROFILE=/dev/null stops the
+# installer from editing ~/.zshrc, which already loads nvm.
+export NVM_DIR="$HOME/.nvm"
+if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    echo "Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | PROFILE=/dev/null bash
+else
+    echo "nvm is already installed."
+fi
+
+. "$NVM_DIR/nvm.sh"
+if ! nvm ls --no-colors 2>/dev/null | grep -q "v[0-9]"; then
+    echo "Installing Node.js LTS..."
+    nvm install --lts
 else
     echo "Node.js is already installed."
 fi

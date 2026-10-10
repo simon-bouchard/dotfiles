@@ -46,6 +46,7 @@ done
 echo ""
 echo "=== Terminal / editor ==="
 check_cmd tmux
+check_path "tpm" "$HOME/.tmux/plugins/tpm"
 check_cmd nvim
 
 echo ""
@@ -59,6 +60,12 @@ check_cmd btop
 check_cmd glow
 check_cmd git
 check_cmd gh
+check_cmd ripgrep rg
+check_cmd fd-find fdfind
+check_cmd make
+check_cmd gcc
+check_cmd unzip
+check_cmd shellcheck
 
 echo ""
 echo "=== Python tooling ==="
@@ -71,6 +78,7 @@ check_cmd debugpy-adapter
 
 echo ""
 echo "=== Node ==="
+check_path "nvm" "$HOME/.nvm/nvm.sh"
 check_cmd node
 check_cmd npm
 
