@@ -23,11 +23,12 @@ source ~/.zshrc
 
 ## What's Included
 
-**Shell**: Zsh + Oh-My-Zsh + Starship prompt + Zoxide (smart cd)
+**Shell**: Zsh (vi mode) + Oh-My-Zsh + zsh-autocomplete + Starship prompt + Zoxide (smart cd) +
+Atuin (searchable history)
 **Terminal**: Tmux with sensible defaults
-**Editor**: Neovim with LSP, debugging, format-on-save
-**Python**: Ruff (linting/formatting), Pyright (LSP), uv (package manager), pre-commit
-**Tools**: lsd, btop, glow (markdown viewer), xclip utilities
+**Editor**: Neovim with LSP, debugging, format-on-save, Telescope, oil.nvim, which-key, Treesitter
+**Python**: Ruff (linting/formatting, import sorting), Pyright (LSP), uv (package manager), pre-commit
+**Tools**: lsd, btop, glow (markdown viewer), fzf, xclip utilities
 
 ## Machine-specific Config
 
@@ -41,22 +42,43 @@ Tracked files are shared by every machine. Per-machine settings live in untracke
 | `~/.gitconfig.local` | Git identity, credential helpers |
 | `~/.claude/CLAUDE.local.md` | Machine context for Claude Code (OS, terminal, work tools) |
 
-Neovim 0.10 vs 0.11+ differences (LSP API, telescope version) are detected automatically.
+Neovim version differences are detected automatically: 0.10 vs 0.11+ (LSP API, Telescope and
+gitsigns versions) and 0.12+ (nvim-treesitter `main` branch, which builds parsers with the
+`tree-sitter` CLI installed by `setup.sh`; older versions use the frozen `master` branch).
 
 ## Key Bindings
 
 ### Tmux
-- Prefix: `Ctrl+a` (not Ctrl+b)
+- Prefix: `Ctrl+a` (not Ctrl+b); press it twice to send `Ctrl+a` to the shell
 - Split: `|` horizontal, `-` vertical
 - Panes: `Alt+arrows`
 - Reload: `prefix + r`
 
+### Shell prompt (vi mode)
+- `Up`: Atuin history list, exact text (type part of a command first to filter)
+- `Ctrl+r`: Atuin history list, fuzzy. In either list: `Enter` runs, `Tab` edits, `Ctrl+s` switches
+  matching mode
+- `Down`: completion menu (zsh-autocomplete)
+- `Tab`: accept the grey autosuggestion if shown, otherwise complete
+- `Ctrl+a` / `Ctrl+e`: start / end of line (insert mode)
+
 ### Neovim
-- Leader: `Space`
-- LSP: `gd` (definition), `K` (hover), `gr` (references)
-- Format: `<leader>f` (manual format, auto-formats on save)
+- Leader: `Space`. Pause after a key like `<leader>` or `g` and which-key lists what can follow
+- Files: `-` opens the current file's directory in oil (edit names and `:w` to create, rename,
+  move or delete files; `g?` for help)
+- Find (Telescope): `<leader>ff` files, `<leader>fg` grep, `<leader>fw` word under cursor,
+  `<leader>f/` in current file, `<leader>fb` buffers, `<leader>fr` recent, `<leader>fd` diagnostics,
+  `<leader>fk` keymaps, `<leader>f.` reopen last search. `Ctrl+s` opens a result in a split
+- Symbols: `<leader>fs` / `<leader>fS` classes and functions in file / project,
+  `<leader>fa` / `<leader>fA` all symbols
+- LSP: `gd` (definition), `gr` (references, in Telescope), `K` (hover), `<leader>rn` (rename),
+  `<leader>lf` (format; also runs on save)
 - Diagnostics: `[d` / `]d` (navigate), `<leader>e` (open)
+- Completion: `Tab` / `Shift+Tab` to move or jump through snippet fields, `Enter` to accept,
+  `Ctrl+e` to close
+- Scrolling: `Ctrl+d` / `Ctrl+u` half page, cursor kept centered
 - Debug: `<leader>b` (breakpoint), `<leader>dc` (continue), `<leader>di` (step in), `<leader>do` (step over)
+- Practice: `:VimBeGood`
 
 ### Zoxide
 - `z <directory>` - Jump to frequently used directory
@@ -111,9 +133,10 @@ pyright
 
 ## Files
 
-- `config/zshrc` - Shell config with aliases, zoxide, uv
+- `config/zshrc` - Shell config with aliases, zoxide, uv, Atuin and key bindings
+- `config/atuin.toml` - Atuin history search settings
 - `config/tmux.conf` - Tmux configuration
-- `config/init.lua` - Neovim setup (LSP, DAP, format-on-save)
+- `config/init.lua` - Neovim setup (LSP, DAP, format-on-save, Telescope, oil, Treesitter)
 - `config/starship.toml` - Prompt styling
 - `config/ruff.toml` - Global Ruff config (via `RUFF_CONFIG`)
 - `git/gitconfig` - Git aliases and settings (identity goes in `~/.gitconfig.local`)
@@ -127,6 +150,7 @@ pyright
 - lua_ls (Lua)
 - ts_ls (TypeScript/JavaScript)
 - bashls (Bash)
+- clangd (C/C++)
 - html, cssls (Web)
 - jsonls, yamlls (Config files)
 
@@ -178,8 +202,9 @@ Run `btop` in a tmux pane to monitor CPU, memory, disk, network while coding.
 
 - Run `setup.sh` once per machine (idempotent)
 - Run `symlink.sh` after updating dotfiles
-- Neovim packages auto-install on first launch
-- Python files format automatically on save
+- Neovim packages and Treesitter parsers auto-install on first launch
+- Python files format and sort imports automatically on save
+- Atuin imports `~/.zsh_history` once at install; history stays local (no sync account)
 - Pre-commit runs before each git commit
 - Use `uv` instead of `pip` for faster installs
 

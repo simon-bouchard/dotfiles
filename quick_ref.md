@@ -39,10 +39,10 @@ git commit                # Hooks run automatically
 ```
 gd          - Go to definition
 K           - Hover documentation
-gr          - Find references
+gr          - Find references (Telescope)
 <leader>rn  - Rename symbol
 <leader>ca  - Code actions
-<leader>f   - Format (manual, auto on save)
+<leader>lf  - Format (manual, auto on save)
 <leader>e   - Show diagnostics
 [d / ]d     - Navigate diagnostics
 ```
@@ -61,7 +61,6 @@ gr          - Find references
 ### General
 ```
 <Space>     - Leader key
-<leader>p   - Toggle paste mode
 ```
 
 ## Python Project Setup (30 seconds)
