@@ -427,6 +427,21 @@ vim.opt.signcolumn = "yes"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
+-- scrolloff: about 1/6 of each window's height, capped at 8, so small windows keep their space.
+-- Floating windows are left alone. BufWinEnter: the value is per buffer in each window.
+local function adapt_scrolloff()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if vim.api.nvim_win_get_config(win).relative == "" then
+            vim.wo[win].scrolloff = math.min(8, math.floor(vim.api.nvim_win_get_height(win) / 6))
+        end
+    end
+end
+vim.api.nvim_create_autocmd({
+    "VimEnter", "VimResized", "WinResized", "WinNew", "TabEnter", "BufWinEnter",
+}, {
+    callback = adapt_scrolloff,
+})
+
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.incsearch = true
@@ -559,7 +574,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map('gr', require("telescope.builtin").lsp_references, "Find references")
         map('<leader>rn', vim.lsp.buf.rename, "Rename symbol")
         map('<leader>ca', vim.lsp.buf.code_action, "Code action")
-        map('<leader>f', function() vim.lsp.buf.format { async = true } end, "Format buffer")
+        map('<leader>lf', function() vim.lsp.buf.format { async = true } end, "Format buffer")
     end,
 })
 
