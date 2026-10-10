@@ -8,6 +8,7 @@ if vim.uv.fs_stat(local_config) then
     machine = vim.tbl_extend("force", machine, dofile(local_config))
 end
 local has_nvim_011 = vim.fn.has("nvim-0.11") == 1
+local has_nvim_012 = vim.fn.has("nvim-0.12") == 1
 
 -- LSP servers and their commands (commands are used with the 0.11+ vim.lsp.config API)
 local lsp_cmds = {
@@ -61,20 +62,31 @@ require("lazy").setup({
     "nvim-lualine/lualine.nvim",
     "folke/tokyonight.nvim",
 
-    -- Treesitter (master: the default branch is now the incompatible "main" rewrite)
+    -- Treesitter: "main" is an incompatible rewrite for nvim 0.12+ that builds parsers with the
+    -- tree-sitter CLI; "master" is frozen but still supports 0.10/0.11
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "master",
+        branch = has_nvim_012 and "main" or "master",
+        lazy = false,
         build = ":TSUpdate",
         config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = {
-                    "markdown", "markdown_inline", "python", "lua", "bash", "c", "cpp",
-                    "javascript", "typescript", "html", "css", "json", "yaml", "toml",
-                    "vim", "vimdoc", "query",
-                },
-                highlight = { enable = true },
-            })
+            local parsers = {
+                "markdown", "markdown_inline", "python", "lua", "bash", "c", "cpp",
+                "javascript", "typescript", "html", "css", "json", "yaml", "toml",
+                "vim", "vimdoc", "query",
+            }
+            if has_nvim_012 then
+                require("nvim-treesitter").install(parsers)
+                -- pcall: filetypes without an installed parser keep regex highlighting
+                vim.api.nvim_create_autocmd("FileType", {
+                    callback = function(args) pcall(vim.treesitter.start, args.buf) end,
+                })
+            else
+                require("nvim-treesitter.configs").setup({
+                    ensure_installed = parsers,
+                    highlight = { enable = true },
+                })
+            end
         end,
     },
 
@@ -412,6 +424,8 @@ vim.opt.relativenumber = true
 vim.opt.laststatus = 3
 vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true

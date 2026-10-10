@@ -170,6 +170,27 @@ else
     echo "Neovim is already installed."
 fi
 
+# tree-sitter CLI: nvim-treesitter's main branch (used on nvim 0.12+) builds parsers with it.
+# Prebuilt release binary; apt doesn't package it and the docs advise against the npm one.
+if ! command -v tree-sitter >/dev/null 2>&1; then
+    case "$(uname -m)" in
+        x86_64) TS_ARCH=x64 ;;
+        aarch64) TS_ARCH=arm64 ;;
+        *) TS_ARCH="" ;;
+    esac
+    if [ -n "$TS_ARCH" ]; then
+        echo "Installing tree-sitter CLI..."
+        mkdir -p "$HOME/.local/bin"
+        curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-$TS_ARCH.gz" \
+            | gunzip > "$HOME/.local/bin/tree-sitter"
+        chmod +x "$HOME/.local/bin/tree-sitter"
+    else
+        echo "No prebuilt tree-sitter CLI for $(uname -m); install it manually."
+    fi
+else
+    echo "tree-sitter CLI is already installed."
+fi
+
 # ===== PYTHON TOOLING =====
 
 # Install uv (Python package manager)

@@ -48,6 +48,7 @@ echo "=== Terminal / editor ==="
 check_cmd tmux
 check_path "tpm" "$HOME/.tmux/plugins/tpm"
 check_cmd nvim
+check_cmd tree-sitter
 
 echo ""
 echo "=== CLI tools ==="
