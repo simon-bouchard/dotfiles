@@ -68,7 +68,12 @@ require("lazy").setup({
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
-                ensure_installed = { "markdown", "markdown_inline" },
+                ensure_installed = {
+                    "markdown", "markdown_inline", "python", "lua", "bash", "c", "cpp",
+                    "javascript", "typescript", "html", "css", "json", "yaml", "toml",
+                    "vim", "vimdoc", "query",
+                },
+                highlight = { enable = true },
             })
         end,
     },
@@ -180,6 +185,7 @@ require("lazy").setup({
         "folke/which-key.nvim",
         event = "VeryLazy",
         opts = {
+            delay = 800,
             spec = {
                 { "<leader>f", group = "find" },
                 { "<leader>g", group = "git" },
@@ -267,11 +273,13 @@ require("lazy").setup({
         "hrsh7th/nvim-cmp",
         config = function()
             local cmp = require("cmp")
+            local luasnip = require("luasnip")
+            require("luasnip.loaders.from_vscode").lazy_load()
 
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        require('luasnip').lsp_expand(args.body)
+                        luasnip.lsp_expand(args.body)
                     end,
                 },
                 mapping = cmp.mapping.preset.insert({
@@ -280,10 +288,30 @@ require("lazy").setup({
                     ['<C-Space>'] = cmp.mapping.complete(),
                     ['<C-e>'] = cmp.mapping.abort(),
                     ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                    -- Tab: next menu item, else jump to the next snippet field, else a real tab
+                    ['<Tab>'] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_next_item()
+                        elseif luasnip.locally_jumpable(1) then
+                            luasnip.jump(1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                    ['<S-Tab>'] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_prev_item()
+                        elseif luasnip.locally_jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
                 }),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
+                    { name = 'path' },
                 }, {
                     { name = 'buffer' },
                 })
@@ -293,7 +321,11 @@ require("lazy").setup({
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
-    "L3MON4D3/LuaSnip",
+    "saadparwaiz1/cmp_luasnip",
+    {
+        "L3MON4D3/LuaSnip",
+        dependencies = { "rafamadriz/friendly-snippets" },
+    },
 
     -- Formatting (NEW)
     {
@@ -301,7 +333,7 @@ require("lazy").setup({
         config = function()
             require("conform").setup({
                 formatters_by_ft = {
-                    python = { "ruff_format" },
+                    python = { "ruff_organize_imports", "ruff_format" },
                 },
                 format_on_save = {
                     timeout_ms = 500,
@@ -390,6 +422,8 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.backspace = { "indent", "eol", "start" }
+
+vim.opt.undofile = true
 
 vim.opt.clipboard = "unnamedplus"
 vim.opt.mouse = "a"
@@ -499,6 +533,12 @@ require('lualine').setup({
 -- LSP SETUP (must run before the first buffer loads, or servers start without this config)
 -- ============================================================================
 
+-- Drop the 0.11+ default gr* maps: they duplicate the maps below and make gr wait for a 3rd key
+for _, lhs in ipairs({ "grr", "gri", "gra", "grn", "grt" }) do
+    pcall(vim.keymap.del, "n", lhs)
+end
+pcall(vim.keymap.del, "x", "gra")
+
 -- LspAttach fires for every client, however it was started (including mason-lspconfig)
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
@@ -508,7 +548,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map('gd', vim.lsp.buf.definition, "Go to definition")
         map('K', vim.lsp.buf.hover, "Hover documentation")
         map('gi', vim.lsp.buf.implementation, "Go to implementation")
-        map('gr', vim.lsp.buf.references, "List references")
+        map('gr', require("telescope.builtin").lsp_references, "Find references")
         map('<leader>rn', vim.lsp.buf.rename, "Rename symbol")
         map('<leader>ca', vim.lsp.buf.code_action, "Code action")
         map('<leader>f', function() vim.lsp.buf.format { async = true } end, "Format buffer")
