@@ -411,6 +411,9 @@ require("lazy").setup({
             require("dap-python").setup("debugpy-adapter")
         end
     },
+
+    -- Practice
+    { "ThePrimeagen/vim-be-good", cmd = "VimBeGood" },
 })
 
 -- ============================================================================

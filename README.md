@@ -23,12 +23,13 @@ source ~/.zshrc
 
 ## What's Included
 
-**Shell**: Zsh (vi mode) + Oh-My-Zsh + zsh-autocomplete + Starship prompt + Zoxide (smart cd) +
-Atuin (searchable history)
-**Terminal**: Tmux with sensible defaults
-**Editor**: Neovim with LSP, debugging, format-on-save, Telescope, oil.nvim, which-key, Treesitter
-**Python**: Ruff (linting/formatting, import sorting), Pyright (LSP), uv (package manager), pre-commit
-**Tools**: lsd, btop, glow (markdown viewer), fzf, xclip utilities
+| Area | Tools |
+|---|---|
+| **Shell** | Zsh (vi mode), Oh-My-Zsh, zsh-autocomplete, Starship prompt, Zoxide (smart cd), Atuin (searchable history) |
+| **Terminal** | Tmux with sensible defaults |
+| **Editor** | Neovim: LSP, debugging, format-on-save, Telescope, oil.nvim, which-key, Treesitter |
+| **Python** | Ruff (lint, format, import sorting), Pyright (LSP), uv (package manager), pre-commit |
+| **Tools** | lsd, btop, glow (markdown viewer), fzf, xclip |
 
 ## Machine-specific Config
 
