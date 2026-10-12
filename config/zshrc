@@ -145,6 +145,7 @@ alias gsw="git switch"
 alias gb="git branch"
 alias gm="git merge"
 alias gst="git stash"
+alias grb="git rebase"
 
 # Interactive rebase: `grbi 3` rebases the last 3 commits, other args pass through
 # (replaces oh-my-zsh's grbi alias, which would otherwise block the function definition)

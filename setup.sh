@@ -191,6 +191,28 @@ else
     echo "tree-sitter CLI is already installed."
 fi
 
+# lazygit: git TUI, opened in nvim with <leader>gg. Prebuilt release binary (apt only has it on
+# Ubuntu 25.04+); the asset name embeds the version, so read it from the latest release tag.
+if ! command -v lazygit >/dev/null 2>&1; then
+    case "$(uname -m)" in
+        x86_64) LG_ARCH=x86_64 ;;
+        aarch64) LG_ARCH=arm64 ;;
+        *) LG_ARCH="" ;;
+    esac
+    LG_VERSION=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
+        | grep -Po '"tag_name": *"v\K[^"]*')
+    if [ -n "$LG_ARCH" ] && [ -n "$LG_VERSION" ]; then
+        echo "Installing lazygit $LG_VERSION..."
+        mkdir -p "$HOME/.local/bin"
+        curl -fsSL "https://github.com/jesseduffield/lazygit/releases/download/v$LG_VERSION/lazygit_${LG_VERSION}_linux_$LG_ARCH.tar.gz" \
+            | tar -xz -C "$HOME/.local/bin" lazygit
+    else
+        echo "Could not install lazygit for $(uname -m); install it manually."
+    fi
+else
+    echo "lazygit is already installed."
+fi
+
 # ===== PYTHON TOOLING =====
 
 # Install uv (Python package manager)
