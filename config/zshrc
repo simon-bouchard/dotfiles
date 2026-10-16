@@ -68,6 +68,8 @@ _autosuggest_accept_or_complete() {
 zle -N _autosuggest_accept_or_complete
 ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(_autosuggest_accept_or_complete)
 bindkey -M viins '^I' _autosuggest_accept_or_complete
+# Ctrl-Space accepts the next word of the autosuggestion, like Ctrl-Right
+bindkey -M viins '^@' forward-word
 
 # Atuin takes over Up (exact-text) and Ctrl-R (fuzzy) history lists, see config/atuin.toml.
 # Must come after the rebinds above to win the keys; Down keeps zsh-autocomplete's menu.
