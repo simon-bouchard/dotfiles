@@ -244,6 +244,16 @@ require("lazy").setup({
         },
     },
 
+    -- Git: lazygit TUI in a floating window (stage, commit, push/pull, interactive rebase)
+    {
+        "kdheepak/lazygit.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        cmd = { "LazyGit", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+        keys = {
+            { "<leader>gg", "<cmd>LazyGit<CR>", desc = "Lazygit" },
+        },
+    },
+
     -- LSP & Mason (v2 of all three needs nvim 0.11+, so stay on v1 on older versions)
     {
         "neovim/nvim-lspconfig",
@@ -413,7 +423,33 @@ require("lazy").setup({
     },
 
     -- Practice
-    { "ThePrimeagen/vim-be-good", cmd = "VimBeGood" },
+    {
+        "ThePrimeagen/vim-be-good",
+        cmd = "VimBeGood",
+        -- Upstream render never shrinks the buffer, so leftover lines from a longer game (ci{)
+        -- break the menu's line-count check and deletes stop selecting. Trim after each render.
+        config = function()
+            -- ci{ (its only caller) passes an offset larger than the game area, so the range is
+            -- reversed and can return 0, which crashes rendering. Pick a start the block fits in.
+            require("vim-be-good.game-utils").getRandomInsertionLocation = function(count, size)
+                return math.random(1, count - size + 1)
+            end
+
+            local Buffer = require("vim-be-good.buffer")
+            local render = Buffer.render
+            Buffer.render = function(self, lines)
+                render(self, lines)
+                local last = 1 + #self.instructions + #lines
+                vim.api.nvim_buf_set_lines(self.bufh, last, -1, false, {})
+            end
+
+            -- Upstream :VimBeGood unloads the plugin's modules on every run, which would drop
+            -- the patches above; redefine it to just open the menu
+            vim.api.nvim_create_user_command("VimBeGood", function()
+                require("vim-be-good").menu()
+            end, {})
+        end,
+    },
 })
 
 -- ============================================================================
