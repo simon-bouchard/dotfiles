@@ -244,11 +244,20 @@ require("lazy").setup({
         },
     },
 
-    -- Git: lazygit TUI in a floating window (stage, commit, push/pull, interactive rebase)
+    -- Git: lazygit TUI in a floating window (stage, commit, push/pull, interactive rebase).
+    -- Later commits open the terminal with jobstart's `term` option (nvim 0.11+), so pin the
+    -- last termopen one on older versions
     {
         "kdheepak/lazygit.nvim",
+        commit = not has_nvim_011 and "4839ab642962cc76bb1bf278427dc4c59be15072" or nil,
         dependencies = { "nvim-lua/plenary.nvim" },
         cmd = { "LazyGit", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+        -- lazygit needs git 2.32+ and finds it on PATH: reuse the newer git set for diffview
+        init = function()
+            if machine.diffview_git then
+                vim.env.PATH = vim.fn.fnamemodify(machine.diffview_git, ":h") .. ":" .. vim.env.PATH
+            end
+        end,
         keys = {
             { "<leader>gg", "<cmd>LazyGit<CR>", desc = "Lazygit" },
         },
