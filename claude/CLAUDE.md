@@ -28,9 +28,9 @@ Focus on clarity, maintainability, and correctness.
 
 ### File structure
 - Docstring comments on classes and functions, avoid inline comments unless necessary
-- Cap any comment at 2-3 lines max, in any language. Longer rationale belongs in the chat
+- Cap any comment at 2 lines max, in any language. Longer rationale belongs in the chat
   or PR notes, not the code
-- You may create a README.md when relevant
+- You may create or update README.md, CHANGELOG.md and CLAUDE.md when relevant
 - Do not create explanation or summary files (implementation_notes.md, explanation.txt, etc.)
   All rationale belongs in the chat, not in files
 
