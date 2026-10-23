@@ -256,8 +256,10 @@ unset _km
 # Add global ruff configuration
 export RUFF_CONFIG="$HOME/.config/ruff/ruff.toml"
 
-# Start a detached tmux server on first shell so continuum restores sessions right away.
-# The unnamed session is "0", which resurrect kills after restoring unless the save has a "0".
+# Start a detached tmux server on first shell so continuum restores sessions right away. Session
+# "0" is killed by resurrect after restoring; snapshot keeps the pre-crash tab list for trestore.
 if [[ -z $TMUX ]] && command -v tmux >/dev/null && ! tmux has-session 2>/dev/null; then
+    ~/dotfiles/scripts/tmux_attached_sessions.sh snapshot
     tmux new-session -d
 fi
+alias trestore="~/dotfiles/scripts/tmux_attached_sessions.sh reopen"

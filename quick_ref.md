@@ -140,6 +140,7 @@ gl          = git log --oneline --graph
 ```bash
 t           = tmux
 ta          = tmux attach
+trestore    = reopen a tab per session that was open before a crash
 ```
 
 ### Tools
