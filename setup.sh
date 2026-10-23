@@ -327,6 +327,27 @@ if ! grep -q microsoft /proc/version 2>/dev/null; then
     gsettings set "$TERM_KEYS" next-tab '<Primary>Tab'
     gsettings set "$TERM_KEYS" prev-tab '<Primary><Shift>Tab'
 
+    # Ctrl+Alt+V types the VIN from ~/.vin in any window (scripts/type_vin.sh, needs xdotool)
+    if ! command -v xdotool >/dev/null 2>&1; then
+        echo "Installing xdotool..."
+        sudo apt install -y xdotool
+    fi
+    echo "Binding Ctrl+Alt+V to type_vin..."
+    MEDIA_KEYS="org.gnome.settings-daemon.plugins.media-keys"
+    VIN_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/type-vin/"
+    CURRENT=$(gsettings get "$MEDIA_KEYS" custom-keybindings)
+    if [[ "$CURRENT" != *"$VIN_PATH"* ]]; then
+        if [[ "$CURRENT" == "@as []" || "$CURRENT" == "[]" ]]; then
+            gsettings set "$MEDIA_KEYS" custom-keybindings "['$VIN_PATH']"
+        else
+            gsettings set "$MEDIA_KEYS" custom-keybindings "${CURRENT%]}, '$VIN_PATH']"
+        fi
+    fi
+    VIN_KEY="$MEDIA_KEYS.custom-keybinding:$VIN_PATH"
+    gsettings set "$VIN_KEY" name 'Type VIN'
+    gsettings set "$VIN_KEY" command "$HOME/dotfiles/scripts/type_vin.sh"
+    gsettings set "$VIN_KEY" binding '<Primary><Alt>v'
+
     # nvtop (GPU monitor)
     if ! command -v nvtop >/dev/null 2>&1; then
         echo "Installing nvtop..."
