@@ -56,6 +56,22 @@ bindkey -M viins '^[OB' down-line-or-select
 bindkey -M viins '^R' history-incremental-search-backward
 bindkey -M viins '^S' menu-search
 
+# hjkl move inside the completion menu (entered with Down, or j in vi command mode)
+bindkey -M menuselect 'h' backward-char
+bindkey -M menuselect 'j' down-history
+bindkey -M menuselect 'k' up-history
+bindkey -M menuselect 'l' forward-char
+
+# Esc steps the cursor back, so "cd " would complete "cd" as a command. j in vi command mode
+# returns to insert mode at end of line first (vi-add-eol would accept the autosuggestion).
+_vi_menu_select() {
+    zle vi-insert
+    CURSOR=$#BUFFER
+    zle down-line-or-select
+}
+zle -N _vi_menu_select
+bindkey -M vicmd 'j' _vi_menu_select
+
 # Tab accepts the grey autosuggestion when one is shown, otherwise completes as usual.
 # Ignored by zsh-autosuggestions, whose wrapper would clear POSTDISPLAY before the check.
 _autosuggest_accept_or_complete() {
