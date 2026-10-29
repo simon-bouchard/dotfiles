@@ -9,12 +9,13 @@ current="$dir/attached_sessions"
 previous="$current.prev"
 
 record() {
-	local detaching="${1:-}"
+	local detaching="${1:-}" tmp
 	mkdir -p "$dir"
+	tmp=$(mktemp "$current.XXXXXX")
 	tmux list-clients -F "#{client_name}"$'\t'"#{client_session}" |
 		awk -F'\t' -v skip="$detaching" '$1 != skip { print $2 }' |
-		sort -u >"$current.tmp"
-	mv "$current.tmp" "$current"
+		sort -u >"$tmp"
+	mv "$tmp" "$current"
 }
 
 snapshot() {
