@@ -8,7 +8,8 @@
 - Do not suggest pip if uv is available in the project
 
 ## Prose Style
-Try to avoid em dashes.
+Never use em dashes, in any language.
+Keep tickets, messages and PR replies short by default; expand only when asked.
 Text meant to be copied (suggested comments, replies, messages) must start at column 0: no
 indentation, no blockquote, not nested under a list item, so it pastes without leading spaces.
 
@@ -37,6 +38,10 @@ Focus on clarity, maintainability, and correctness.
 ## Behaviour
 - No emojis in code or files
 - When uncertain about scope, ask before implementing
+- "Investigate", "look at", "check", "explain", a question or a pasted log means read-only:
+  report findings, and edit no code, docs, knowledge base or tickets until I say go.
+  Scratchpad files and temporary edits needed to investigate (debug prints, probes) are fine;
+  revert the temporary ones before reporting.
 - Prefer editing existing code over adding new abstractions
 - Ask for approval before any git operation that changes history or reaches a remote:
   commit, push, merge, rebase, reset, cherry-pick, tag, branch deletion, force operations
