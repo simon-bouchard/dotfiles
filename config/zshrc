@@ -133,6 +133,22 @@ alias ta="tmux attach"
 alias tat="tmux attach-session -t"
 alias tls="tmux list-sessions"
 alias cr="claude --resume"
+
+# Sessions start without the Artifact tool (~6k tokens) unless launched with claudea, and with
+# Claude in Chrome only under claude_chrome_dirs (set in ~/.zshrc.local). Subcommands pass through.
+claude() {
+  case "$1" in
+    plugin|plugins|mcp|update|doctor|install|config|auth|setup-token) command claude "$@"; return ;;
+  esac
+  local -a extra=()
+  local dir
+  [[ -z $CLAUDE_ARTIFACTS ]] && extra+=(--settings '{"permissions":{"deny":["Artifact"]}}')
+  for dir in $claude_chrome_dirs; do
+    [[ $PWD/ == "$dir"/* ]] && { extra+=(--chrome); break; }
+  done
+  command claude "${extra[@]}" "$@"
+}
+alias claudea="CLAUDE_ARTIFACTS=1 claude"
 alias so="source"
 alias tl="tail -f"
 alias glow="glow -s ~/.config/glow/no-margin.json"

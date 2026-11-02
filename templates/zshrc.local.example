@@ -8,5 +8,8 @@
 # No Nerd Font on this machine: use the ASCII prompt
 # export STARSHIP_CONFIG=~/.config/starship-ascii.toml
 
+# Directories where claude starts with Claude in Chrome (--chrome)
+# claude_chrome_dirs=(~/qa)
+
 # Secrets kept outside the repo
 # [[ -f ~/.config/secrets/example.env ]] && source ~/.config/secrets/example.env
