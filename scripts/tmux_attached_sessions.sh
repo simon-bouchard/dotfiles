@@ -28,7 +28,7 @@ mark() {
 	local name
 	while IFS= read -r name; do
 		tmux has-session -t "=$name" 2>/dev/null || continue
-		tmux set-option -t "=$name" @was_open 1
+		tmux set-option -t "=$name:" @was_open 1
 	done <"$previous"
 }
 
@@ -41,7 +41,7 @@ reopen() {
 	while IFS= read -r name; do
 		if ! tmux has-session -t "=$name" 2>/dev/null; then
 			echo "Skipped $name: session does not exist" >&2
-		elif (($(tmux display-message -p -t "=$name" "#{session_attached}") > 0)); then
+		elif (($(tmux display-message -p -t "=$name:" "#{session_attached}") > 0)); then
 			echo "Skipped $name: already attached" >&2
 		else
 			gnome-terminal --tab -- tmux attach-session -t "=$name"
