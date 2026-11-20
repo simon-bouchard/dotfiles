@@ -131,8 +131,40 @@ alias c="cat"
 alias t="tmux"
 alias ta="tmux attach"
 alias tat="tmux attach-session -t"
+alias tn="tmux new -s"
 alias tls="tmux list-sessions"
 alias cr="claude --resume"
+
+# Bare `tmux` and `tmux new` without -s name the session after the current git repo (the main
+# repo for a worktree), adding -2, -3... if taken. Outside a repo tmux numbers it as usual.
+tmux() {
+    local sub=${1:-new-session} arg common base name n=2
+    if [[ $sub != new && $sub != new-session ]]; then
+        command tmux "$@"
+        return
+    fi
+    for arg in "${@:2}"; do
+        [[ $arg == -*s* && $arg != --* ]] && { command tmux "$@"; return; }
+    done
+    if common=$(git rev-parse --git-common-dir 2>/dev/null); then
+        common=${common:A}
+        if [[ ${common:t} == .git ]]; then
+            base=${common:h:t}
+        else
+            base=$(git rev-parse --show-toplevel 2>/dev/null) && base=${base:t}
+        fi
+    fi
+    if [[ -z $base ]]; then
+        command tmux "$@"
+        return
+    fi
+    base=${base//[.:]/_}
+    name=$base
+    while command tmux has-session -t "=$name" 2>/dev/null; do
+        name=$base-$((n++))
+    done
+    command tmux "$sub" -s "$name" "${@:2}"
+}
 
 # Sessions start without the Artifact tool (~6k tokens) unless launched with claudea, and with
 # Claude in Chrome only under claude_chrome_dirs (set in ~/.zshrc.local). Subcommands pass through.
@@ -292,6 +324,6 @@ export RUFF_CONFIG="$HOME/.config/ruff/ruff.toml"
 # "0" is killed by resurrect after restoring; snapshot keeps the pre-crash tab list for trestore.
 if [[ -z $TMUX ]] && command -v tmux >/dev/null && ! tmux has-session 2>/dev/null; then
     ~/dotfiles/scripts/tmux_attached_sessions.sh snapshot
-    tmux new-session -d
+    command tmux new-session -d
 fi
 alias trestore="~/dotfiles/scripts/tmux_attached_sessions.sh reopen"
