@@ -32,6 +32,12 @@ Focus on clarity, maintainability, and correctness.
 - Cap any comment at 2 lines max, in any language. Longer rationale belongs in the chat
   or PR notes, not the code
 - You may create or update README.md, CHANGELOG.md and CLAUDE.md when relevant
+- Changelog entries: one line per ticket saying what changed, not how. Aim for 5 to 15 words,
+  about 25 max as a guideline; a larger ticket may need a little more.
+  Add a second line only for an action the consumer must take (new slot, utter, setting).
+  No internals, edge cases, known limitations or rationale: those go in the PR notes.
+  Match the length of the surrounding entries, e.g.
+  `- ([KEY-123](url)) Record the driver added from the add/change vehicle form`
 - Do not create explanation or summary files (implementation_notes.md, explanation.txt, etc.)
   All rationale belongs in the chat, not in files
 
