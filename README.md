@@ -55,7 +55,7 @@ gitsigns versions) and 0.12+ (nvim-treesitter `main` branch, which builds parser
 - Panes: `Alt+arrows`
 - Reload: `prefix + r`
 - After a crash: sessions restore on the first terminal; `trestore` reopens a tab for each session
-  that was open before
+  that was open when the terminal window closed or tmux crashed
 
 ### Shell prompt (vi mode)
 - `Up`: Atuin history list, exact text (type part of a command first to filter)
